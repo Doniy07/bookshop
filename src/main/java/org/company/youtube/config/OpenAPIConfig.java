@@ -1,5 +1,8 @@
 package org.company.youtube.config;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -12,6 +15,13 @@ import java.util.List;
 
 
 @Configuration
+@SecurityScheme(
+    name = "bearerAuth",
+    description = "JWT Authorization header using the Bearer scheme",
+    type = SecuritySchemeType.HTTP,
+    scheme = "bearer",
+    bearerFormat = "JWT",
+    in = SecuritySchemeIn.HEADER)
 public class OpenAPIConfig {
     @Value("${server.url}")
     private String url;
