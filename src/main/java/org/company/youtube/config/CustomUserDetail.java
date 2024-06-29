@@ -1,6 +1,6 @@
 package org.company.youtube.config;
 
-
+import lombok.Getter;
 import org.company.youtube.entity.profile.ProfileEntity;
 import org.company.youtube.enums.ProfileStatus;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+@Getter
 public record CustomUserDetail(ProfileEntity profile) implements UserDetails {
 
     @Override
@@ -49,4 +50,5 @@ public record CustomUserDetail(ProfileEntity profile) implements UserDetails {
 //    public boolean isEnabled() {
 //        return profile.getVisible();
 //    }
+
 }
