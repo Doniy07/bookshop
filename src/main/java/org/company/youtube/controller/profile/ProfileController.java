@@ -1,6 +1,7 @@
 package org.company.youtube.controller.profile;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.company.youtube.dto.profile.ProfileCreateDTO;
 import org.company.youtube.dto.profile.ProfileDTO;
@@ -22,6 +23,7 @@ public class ProfileController {
     }
 
     //    	1. Change password
+
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PutMapping("/current/change-password")
     public ResponseEntity<Boolean> changePassword(
@@ -32,12 +34,15 @@ public class ProfileController {
     }
 
     //    	2. Update Email (with email verification)
+
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PutMapping("/current/update-email/{email}")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<String> updateEmail(
             @PathVariable("email") String newEmail) {
         return ResponseEntity.ok().body(profileService.updateEmail(newEmail));
     }
+
     @Operation(summary = "Verification", description = "Api for auth Verification")
     @GetMapping("/verification/{userId}")
     public ResponseEntity<String> verificationByEmail(@PathVariable("userId") String userId) {
@@ -77,6 +82,7 @@ public class ProfileController {
     }
 //      6. Create Profile (ADMIN)
 //         (id,name,surname,email,Role(ADMIN,MODERATOR))
+
     @PostMapping("/adm/create") // ADMIN
     public ResponseEntity<ProfileDTO> create(@Valid @RequestBody ProfileCreateDTO profile) {
         ProfileDTO response = profileService.create(profile);
