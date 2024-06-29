@@ -22,6 +22,7 @@ public class ProfileDTO {
     private ProfileStatus status;
     private ProfileRole role;
     private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
     private String photoId;
     private AttachDTO photo;
     private String jwt;

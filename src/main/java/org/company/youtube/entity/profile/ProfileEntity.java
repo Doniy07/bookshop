@@ -36,6 +36,8 @@ public class ProfileEntity {
     private ProfileRole role;
     @Column(name = "created_date")
     private LocalDateTime createdDate = LocalDateTime.now();
+    @Column(name = "updated_date")
+    private LocalDateTime updatedDate;
     @Column(name = "photo_id")
     private String photoId;
     @ManyToOne(fetch = FetchType.LAZY)
