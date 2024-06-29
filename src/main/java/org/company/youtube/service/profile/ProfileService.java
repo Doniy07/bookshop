@@ -71,8 +71,7 @@ public class ProfileService {
         dto.setName(entity.getName());
         dto.setSurname(entity.getSurname());
         dto.setEmail(entity.getEmail());
-        dto.setPhotoId(entity.getPhotoId());
-        dto.setPhoto(attachService.toDTO(entity.getPhoto()));
+        dto.setPhoto(attachService.getDTOWithURL(entity.getPhotoId()));
         return dto;
     }
 
