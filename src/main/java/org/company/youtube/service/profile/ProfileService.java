@@ -53,6 +53,7 @@ public class ProfileService {
     }
 
     private ProfileDTO toDTO(ProfileEntity entity) {
+
         ProfileDTO dto = new ProfileDTO();
         dto.setName(entity.getName());
         dto.setSurname(entity.getSurname());
@@ -60,6 +61,18 @@ public class ProfileService {
         dto.setStatus(entity.getStatus());
         dto.setRole(entity.getRole());
         dto.setCreatedDate(entity.getCreatedDate());
+        return dto;
+    }
+
+    private ProfileDTO toDTOUser(ProfileEntity entity) {
+//        (id,name,surname,email,main_photo((url)))
+
+        ProfileDTO dto = new ProfileDTO();
+        dto.setName(entity.getName());
+        dto.setSurname(entity.getSurname());
+        dto.setEmail(entity.getEmail());
+        dto.setPhotoId(entity.getPhotoId());
+        dto.setPhoto(attachService.toDTO(entity.getPhoto()));
         return dto;
     }
 
@@ -102,7 +115,7 @@ public class ProfileService {
         entity.setName(profileUpdateDTO.getName());
         entity.setSurname(profileUpdateDTO.getSurname());
         profileRepository.save(entity);
-        return toDTO(entity);
+        return toDTOUser(entity);
     }
 
     public ProfileDTO updateAttach(MultipartFile file) {
@@ -117,7 +130,7 @@ public class ProfileService {
 
         entity.setPhotoId(attachDTO.getId());
         profileRepository.save(entity);
-        return toDTO(entity);
+        return toDTOUser(entity);
     }
 
     public void sendRegistrationEmail(String profileId, String email) {
@@ -180,5 +193,16 @@ public class ProfileService {
         emailService.checkEmailLimit(email);
         sendRegistrationEmail(entity.getId(), email);
         return "To complete your registration please verify your email.";
+    }
+
+    public ProfileDTO getUserDetail() {
+        ProfileEntity entity = getProfile(SecurityUtil.getProfileId());
+        Objects.requireNonNull(entity);
+        return toDTOUser(entity);
+    }
+
+    public ProfileEntity getProfile(String id) {
+        log.error("Profile not found id = {}", id);
+        return profileRepository.findById(id).orElseThrow(() -> new AppBadException("Profile not found"));
     }
 }

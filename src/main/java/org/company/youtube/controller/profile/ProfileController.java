@@ -70,11 +70,11 @@ public class ProfileController {
 
 //	    5. Get Profile Detail (id,name,surname,email,main_photo((url)))
 
-//    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-//    @GetMapping("/current")
-//    public ResponseEntity<ProfileDTO> getProfile() {
-//        return ResponseEntity.ok().body(profileService.getProfile());
-//    }
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @GetMapping("/user/current")
+    public ResponseEntity<ProfileDTO> getUserDetail() {
+        return ResponseEntity.ok().body(profileService.getUserDetail());
+    }
 //      6. Create Profile (ADMIN)
 //         (id,name,surname,email,Role(ADMIN,MODERATOR))
     @PostMapping("/adm/create") // ADMIN
