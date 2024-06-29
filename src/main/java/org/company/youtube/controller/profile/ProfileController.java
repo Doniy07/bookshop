@@ -1,5 +1,6 @@
 package org.company.youtube.controller.profile;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.company.youtube.dto.profile.ProfileCreateDTO;
 import org.company.youtube.dto.profile.ProfileDTO;
@@ -32,10 +33,23 @@ public class ProfileController {
 
     //    	2. Update Email (with email verification)
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    @PutMapping("/current/update-email")
-    public ResponseEntity<Boolean> updateEmail(
-            @RequestParam String newEmail) {
+    @PutMapping("/current/update-email/{email}")
+    public ResponseEntity<String> updateEmail(
+            @PathVariable("email") String newEmail) {
         return ResponseEntity.ok().body(profileService.updateEmail(newEmail));
+    }
+    @Operation(summary = "Verification", description = "Api for auth Verification")
+    @GetMapping("/verification/{userId}")
+    public ResponseEntity<String> verificationByEmail(@PathVariable("userId") String userId) {
+        String response = profileService.verification(userId);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "Resend", description = "Api for auth Resend")
+    @GetMapping("/resend/{email}")
+    public ResponseEntity<String> resend(@PathVariable("email") String email) {
+        String body = profileService.resend(email);
+        return ResponseEntity.ok().body(body);
     }
 
 //	    3. Update Profile Detail(name,surname)

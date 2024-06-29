@@ -10,13 +10,16 @@ import org.company.youtube.enums.ProfileStatus;
 import org.company.youtube.exception.AppBadException;
 import org.company.youtube.repository.profile.ProfileRepository;
 import org.company.youtube.service.attach.AttachService;
-import org.company.youtube.service.auth.AuthService;
+import org.company.youtube.service.email.EmailService;
+import org.company.youtube.service.email.MailSenderService;
 import org.company.youtube.util.MD5Util;
 import org.company.youtube.util.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -24,10 +27,14 @@ public class ProfileService {
 
     private final ProfileRepository profileRepository;
     private final AttachService attachService;
+    private final MailSenderService mailSenderService;
+    private final EmailService emailService;
 
-    public ProfileService(ProfileRepository profileRepository, AuthService authService, AttachService attachService) {
+    public ProfileService(ProfileRepository profileRepository, AttachService attachService, MailSenderService mailSenderService, EmailService emailService) {
         this.profileRepository = profileRepository;
         this.attachService = attachService;
+        this.mailSenderService = mailSenderService;
+        this.emailService = emailService;
     }
 
 
@@ -74,14 +81,19 @@ public class ProfileService {
         return true;
     }
 
-    public Boolean updateEmail(String newEmail) {
+    public String updateEmail(String newEmail) {
         ProfileEntity entity = SecurityUtil.getProfile();
         Objects.requireNonNull(entity);
-//        sendRegistrationEmail(entity.getId(), newEmail);
 
-        entity.setTempEmail(newEmail);
-        profileRepository.save(entity);
-        return true;
+        if (!entity.getEmail().equals(newEmail)) {
+            sendRegistrationEmail(entity.getId(), newEmail);
+            entity.setTempEmail(newEmail);
+            entity.setStatus(ProfileStatus.REGISTRATION);
+            entity.setUpdatedDate(LocalDateTime.now());
+            profileRepository.save(entity);
+            return "To complete your registration, please verify your email";
+        }
+        return "Email don't changed";
     }
 
     public ProfileDTO update(ProfileUpdateDTO profileUpdateDTO) {
@@ -108,8 +120,65 @@ public class ProfileService {
         return toDTO(entity);
     }
 
-/*    public ProfileEntity getProfile(String id) {
-        log.error("Profile not found id = {}", id);
-        return profileRepository.findById(id).orElseThrow(() -> new AppBadException("Profile not found"));
-    }*/
+    public void sendRegistrationEmail(String profileId, String email) {
+        // send email
+        String url = "http://localhost:8080/profile/verification/" + profileId;
+        String formatText = "<style>\n" +
+                "    a:link, a:visited {\n" +
+                "        background-color: #f44336;\n" +
+                "        color: white;\n" +
+                "        padding: 14px 25px;\n" +
+                "        text-align: center;\n" +
+                "        text-decoration: none;\n" +
+                "        display: inline-block;\n" +
+                "    }\n" +
+                "\n" +
+                "    a:hover, a:active {\n" +
+                "        background-color: red;\n" +
+                "    }\n" +
+                "</style>\n" +
+                "<div style=\"text-align: center\">\n" +
+                "    <h1>Welcome to kun.uz web portal</h1>\n" +
+                "    <br>\n" +
+                "    <p>Please button lick below to complete registration</p>\n" +
+                "    <div style=\"text-align: center\">\n" +
+                "        <a href=\"%s\" target=\"_blank\">This is a link</a>\n" +
+                "    </div>";
+        String text = String.format(formatText, url);
+        String title = "Complete registration";
+        mailSenderService.send(email, title, text);
+        emailService.create(email,title, text); // create history
+    }
+
+    public String verification(String userId) {
+        Optional<ProfileEntity> optional = profileRepository.findById(userId);
+        if (optional.isEmpty()) {
+            throw new AppBadException("User not found");
+        }
+
+        ProfileEntity entity = optional.get();
+        emailService.isNotExpiredEmail(entity.getTempEmail());// check for expireation date
+
+        if (!entity.getStatus().equals(ProfileStatus.REGISTRATION)) {
+            throw new AppBadException("Registration not completed");
+        }
+
+        profileRepository.updateStatus(userId, ProfileStatus.ACTIVE);
+        profileRepository.updateEmail(userId, entity.getTempEmail());
+        return "Success";
+    }
+
+    public String resend(String email) {
+        Optional<ProfileEntity> optional = profileRepository.findByTempEmail(email);
+        if (optional.isEmpty()) {
+            throw new AppBadException("Email not exists");
+        }
+        ProfileEntity entity = optional.get();
+        if (!entity.getStatus().equals(ProfileStatus.REGISTRATION)) {
+            throw new AppBadException("Registration not completed");
+        }
+        emailService.checkEmailLimit(email);
+        sendRegistrationEmail(entity.getId(), email);
+        return "To complete your registration please verify your email.";
+    }
 }
