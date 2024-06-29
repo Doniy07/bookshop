@@ -7,6 +7,7 @@ import org.company.youtube.repository.attach.AttachRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -110,10 +112,10 @@ public class AttachService {
     public AttachDTO toDTO(AttachEntity entity) {
         AttachDTO dto = new AttachDTO();
         dto.setId(entity.getId());
-        dto.setCreatedData(entity.getCreatedData());
-        dto.setType(entity.getType());
-        dto.setSize(entity.getSize());
         dto.setOriginalName(entity.getOriginalName());
+        dto.setSize(entity.getSize());
+//        dto.setType(entity.getType());
+//        dto.setCreatedData(entity.getCreatedData());
         dto.setUrl(serverUrl + "/attach/open/" + entity.getId());
         return dto;
     }
@@ -157,6 +159,40 @@ public class AttachService {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public PageImpl<AttachDTO> pagination(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
+
+        Page<AttachEntity> mapperList = attachRepository.findAll(pageable);
+        return new PageImpl<>(iterateStream(mapperList.getContent()), mapperList.getPageable(), mapperList.getTotalElements());
+
+    }
+
+    private List<AttachDTO> iterateStream(List<AttachEntity> attaches) {
+        return attaches.stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
+    public byte[] load(String attachId) {
+        BufferedImage originalImage;
+        try {
+            // read from db
+            AttachEntity entity = getAttach(attachId);
+            originalImage = ImageIO.read(new File(attachUrl + entity.getPath() + "/" + attachId));
+            // read from system
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(originalImage, entity.getType(), baos);
+
+            baos.flush();
+            byte[] imageInByte = baos.toByteArray();
+            baos.close();
+            return imageInByte;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new byte[0];
         }
     }
 }
