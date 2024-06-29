@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-@Getter
+
 public record CustomUserDetail(ProfileEntity profile) implements UserDetails {
 
     @Override
@@ -51,4 +51,8 @@ public record CustomUserDetail(ProfileEntity profile) implements UserDetails {
 //        return profile.getVisible();
 //    }
 
+    @Override
+    public ProfileEntity profile() {
+        return profile;
+    }
 }
