@@ -47,7 +47,7 @@ public class EmailService {
 
         long count = emailRepository.countByToEmailAndCreatedDateBetween(email, from, to);
         if (count >=3) {
-            throw new AppBadException("Sms limit reached. Please try after some time");
+            throw new AppBadException("Email limit exceeded. Please try after some time");
         }
     }
 
@@ -61,6 +61,8 @@ public class EmailService {
             throw new AppBadException("Confirmation time expired");
         }
     }
+
+    
 
 
 //    public PageImpl<EmailDTO> pagination(int page, int size) {
