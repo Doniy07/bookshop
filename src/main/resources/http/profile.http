@@ -1,0 +1,8 @@
+### Update email
+PUT localhost:8080/profile/current/update-email/muham6597@gmail.com
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MTk2NDc5MjUsImlkIjoiYWY2NWE0NDctODUwZC00NGYxLWEyMzAtMjlkYjhhNGFhNTJkIiwiZW1haWwiOiJka3V5bGl5ZXZAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTcxOTczNDMyNSwiaXNzIjoiWW91dHViZSJ9.Dap9VWQk2P3vUJL9kKnSxJAC_sI_3tlPmfpYI9gaJcDdYye1LXeFhqnRuZtAI7jpwlIfmE2TI18NQdiv-OxkdA
+
+### Resend email link
+PUT localhost:8080/profile/resend/muham6597@gmail.com
+Content-Type: application/json
