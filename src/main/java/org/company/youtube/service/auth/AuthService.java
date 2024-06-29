@@ -15,7 +15,6 @@ import org.company.youtube.service.email.MailSenderService;
 import org.company.youtube.util.JWTUtil;
 import org.company.youtube.util.MD5Util;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -26,13 +25,11 @@ public class AuthService {
     private final ProfileRepository profileRepository;
     private final MailSenderService mailSenderService;
     private final EmailService emailService;
-    private final AttachService attachService;
 
-    public AuthService(ProfileRepository profileRepository, MailSenderService mailSenderService, EmailService emailService, AttachService attachService) {
+    public AuthService(ProfileRepository profileRepository, MailSenderService mailSenderService, EmailService emailService) {
         this.profileRepository = profileRepository;
         this.mailSenderService = mailSenderService;
         this.emailService = emailService;
-        this.attachService = attachService;
     }
 
     //    	1. Registration (with email verification)
@@ -115,7 +112,7 @@ public class AuthService {
         if (!entity.getStatus().equals(ProfileStatus.REGISTRATION)) {
             throw new AppBadException("Registration not completed");
         }
-        emailService.checkEmailLimit(email);
+        emailService.isNotExpiredEmail(email);
         sendRegistrationEmail(entity.getId(), email);
         return "To complete your registration please verify your email.";
     }
