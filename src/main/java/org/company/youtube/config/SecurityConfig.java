@@ -53,9 +53,12 @@ public class SecurityConfig {
 
 
                     .requestMatchers("/auth/**").permitAll()
-                    .requestMatchers("/adm/profile/create/*").hasRole("ADMIN")
+                    .requestMatchers("/profile/adm/create/*").hasRole("ADMIN")
                     .requestMatchers("/profile/**").permitAll()
+                    .requestMatchers("/attach/adm/**").hasRole("ADMIN")
                     .requestMatchers("/attach/**").permitAll()
+                    .requestMatchers("/category/adm/**").hasRole("ADMIN")
+                    .requestMatchers("/tag/adm/**").hasRole("ADMIN")
                     .anyRequest()
                     .authenticated();
         });
