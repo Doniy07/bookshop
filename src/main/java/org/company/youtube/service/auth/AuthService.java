@@ -1,5 +1,6 @@
 package org.company.youtube.service.auth;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.company.youtube.dto.auth.LoginDTO;
 import org.company.youtube.dto.auth.RegistrationDTO;
@@ -20,17 +21,12 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class AuthService {
 
     private final ProfileRepository profileRepository;
     private final MailSenderService mailSenderService;
     private final EmailService emailService;
-
-    public AuthService(ProfileRepository profileRepository, MailSenderService mailSenderService, EmailService emailService) {
-        this.profileRepository = profileRepository;
-        this.mailSenderService = mailSenderService;
-        this.emailService = emailService;
-    }
 
     //    	1. Registration (with email verification)
 //	         id,name,surname,email,main_photo (url)
