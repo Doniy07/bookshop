@@ -22,4 +22,5 @@ public interface ProfileRepository extends CrudRepository<ProfileEntity, String>
     @Transactional
     @Modifying
     @Query("update ProfileEntity set email =?2 where id =?1")
-    void updateEmail(String profileId, String email);}
+    void updateEmail(String profileId, String email);
+}
