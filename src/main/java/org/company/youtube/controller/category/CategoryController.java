@@ -2,7 +2,7 @@ package org.company.youtube.controller.category;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.company.youtube.dto.category.CategoryCreateDTO;
 import org.company.youtube.dto.category.CategoryDTO;
 import org.company.youtube.service.category.CategoryService;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/category")
 @SecurityRequirement(name = "bearerAuth")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CategoryController {
 
     private final CategoryService categoryService;

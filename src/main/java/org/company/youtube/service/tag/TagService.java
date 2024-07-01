@@ -1,6 +1,6 @@
 package org.company.youtube.service.tag;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.company.youtube.dto.tag.TagCreateDTO;
 import org.company.youtube.dto.tag.TagDTO;
 import org.company.youtube.entity.tag.TagEntity;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TagService {
 
     private final TagRepository tagRepository;

@@ -2,7 +2,7 @@ package org.company.youtube.controller.attach;
 
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.company.youtube.dto.attach.AttachDTO;
 import org.company.youtube.service.attach.AttachService;
 import org.springframework.core.io.Resource;
@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/attach")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AttachController {
 
     private final AttachService attachService;

@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class ChannelUpdateDTO {
 
+
     private String name;
     private String description;
     private String bannerId;

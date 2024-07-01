@@ -1,5 +1,6 @@
 package org.company.youtube.service.attach;
 
+import lombok.RequiredArgsConstructor;
 import org.company.youtube.dto.attach.AttachDTO;
 import org.company.youtube.entity.attach.AttachEntity;
 import org.company.youtube.exception.AppBadException;
@@ -28,13 +29,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class AttachService {
 
     private final AttachRepository attachRepository;
-
-    public AttachService(AttachRepository attachRepository) {
-        this.attachRepository = attachRepository;
-    }
 
     @Value("${server.url}")
     private String serverUrl;

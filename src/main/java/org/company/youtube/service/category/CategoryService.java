@@ -1,6 +1,6 @@
 package org.company.youtube.service.category;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.company.youtube.dto.category.CategoryCreateDTO;
 import org.company.youtube.dto.category.CategoryDTO;
 import org.company.youtube.entity.category.CategoryEntity;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;

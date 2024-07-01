@@ -1,7 +1,7 @@
 package org.company.youtube.controller.channel;
 
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.company.youtube.dto.channel.ChannelCreateDTO;
 import org.company.youtube.dto.channel.ChannelDTO;
 import org.company.youtube.dto.channel.ChannelUpdateDTO;
@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/channel")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ChannelController {
 
     private final ChannelService channelService;
@@ -26,35 +26,38 @@ public class ChannelController {
 
 //    2. Update Channel ( USER and OWNER)
 
-    @PostMapping("/update")
-    public ResponseEntity<ChannelDTO> update(@Valid @RequestBody ChannelUpdateDTO dto) {
-        return ResponseEntity.ok().body(channelService.update(dto));
+    @PostMapping("/update/{channelId}")
+    public ResponseEntity<ChannelDTO> update(@PathVariable String channelId,
+                                             @Valid @RequestBody ChannelUpdateDTO dto) {
+        return ResponseEntity.ok().body(channelService.update(channelId, dto));
     }
 
 //    3. Update Channel photo ( USER and OWNER)
 
-    @PostMapping("/update-photo")
-    public ResponseEntity<ChannelDTO> updatePhoto(@RequestParam("image") MultipartFile file) {
-        return ResponseEntity.ok().body(channelService.updatePhoto(file));
+    @PostMapping("/update-photo/{channelId}")
+    public ResponseEntity<ChannelDTO> updatePhoto(@PathVariable String channelId,
+                                                  @RequestParam("image") MultipartFile file) {
+        return ResponseEntity.ok().body(channelService.updatePhoto(channelId, file));
     }
 
 //    4. Update Channel banner ( USER and OWNER)
 
-    @PostMapping("/update-banner")
-    public ResponseEntity<ChannelDTO> updateBanner(@RequestParam("image") MultipartFile file) {
-        return ResponseEntity.ok().body(channelService.updateBanner(file));
+    @PostMapping("/update-banner/{channelId}")
+    public ResponseEntity<ChannelDTO> updateBanner(@PathVariable String channelId,
+                                                   @RequestParam("image") MultipartFile file) {
+        return ResponseEntity.ok().body(channelService.updateBanner(channelId, file));
     }
 
-//    6. Get Channel By Id
-    @GetMapping("/channel/{id}")
-    public ResponseEntity<ChannelDTO> getChannelById(@PathVariable String id) {
-        return ResponseEntity.ok().body(channelService.getChannelById(id));
+    //    6. Get Channel By Id
+    @GetMapping("/channel/{channelId}")
+    public ResponseEntity<ChannelDTO> getChannelById(@PathVariable String channelId) {
+        return ResponseEntity.ok().body(channelService.getChannel(channelId));
     }
 
-//        7. Change Channel Status (ADMIN,USER and OWNER)
-    @PutMapping("/change-status/{id}")
-    public ResponseEntity<ChannelDTO> changeStatus(@PathVariable String id) {
-        return ResponseEntity.ok().body(channelService.changeStatus(id));
+    //        7. Change Channel Status (ADMIN,USER and OWNER)
+    @PutMapping("/change-status/{channelId}")
+    public ResponseEntity<ChannelDTO> changeStatus(@PathVariable String channelId) {
+        return ResponseEntity.ok().body(channelService.changeStatus(channelId));
     }
 
 }

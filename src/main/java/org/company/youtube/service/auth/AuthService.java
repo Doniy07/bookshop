@@ -1,6 +1,6 @@
 package org.company.youtube.service.auth;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.company.youtube.dto.auth.LoginDTO;
 import org.company.youtube.dto.auth.RegistrationDTO;
@@ -10,7 +10,6 @@ import org.company.youtube.enums.ProfileRole;
 import org.company.youtube.enums.ProfileStatus;
 import org.company.youtube.exception.AppBadException;
 import org.company.youtube.repository.profile.ProfileRepository;
-import org.company.youtube.service.attach.AttachService;
 import org.company.youtube.service.email.EmailService;
 import org.company.youtube.service.email.MailSenderService;
 import org.company.youtube.util.JWTUtil;
@@ -21,7 +20,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthService {
 
     private final ProfileRepository profileRepository;

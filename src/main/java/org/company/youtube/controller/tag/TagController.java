@@ -1,7 +1,7 @@
 package org.company.youtube.controller.tag;
 
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.company.youtube.dto.tag.TagCreateDTO;
 import org.company.youtube.dto.tag.TagDTO;
 import org.company.youtube.service.tag.TagService;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/tag")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TagController {
 
     private final TagService tagService;
