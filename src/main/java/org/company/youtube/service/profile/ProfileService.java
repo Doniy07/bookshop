@@ -1,5 +1,6 @@
 package org.company.youtube.service.profile;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.company.youtube.dto.attach.AttachDTO;
 import org.company.youtube.dto.profile.ProfileCreateDTO;
@@ -17,26 +18,18 @@ import org.company.youtube.util.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
     private final AttachService attachService;
     private final MailSenderService mailSenderService;
     private final EmailService emailService;
-
-    public ProfileService(ProfileRepository profileRepository, AttachService attachService, MailSenderService mailSenderService, EmailService emailService) {
-        this.profileRepository = profileRepository;
-        this.attachService = attachService;
-        this.mailSenderService = mailSenderService;
-        this.emailService = emailService;
-    }
-
 
     public ProfileDTO create(ProfileCreateDTO dto) {
         ProfileEntity entity = new ProfileEntity();
@@ -82,7 +75,7 @@ public class ProfileService {
         }
 
         ProfileEntity entity = SecurityUtil.getProfile();
-        Objects.requireNonNull(entity);
+//        Objects.requireNonNull(entity);
 
         if (!entity.getPassword().equals(MD5Util.getMD5(oldPassword))) {
             throw new AppBadException("Wrong password");
@@ -95,13 +88,11 @@ public class ProfileService {
 
     public String updateEmail(String newEmail) {
         ProfileEntity entity = SecurityUtil.getProfile();
-        Objects.requireNonNull(entity);
+//        Objects.requireNonNull(entity);
 
         if (!entity.getEmail().equals(newEmail)) {
             sendRegistrationEmail(entity.getId(), newEmail);
             entity.setTempEmail(newEmail);
-            entity.setStatus(ProfileStatus.REGISTRATION);
-            entity.setUpdatedDate(LocalDateTime.now());
             profileRepository.save(entity);
             return "To complete your registration, please verify your email";
         }
@@ -117,16 +108,17 @@ public class ProfileService {
         return toDTOUser(entity);
     }
 
-    public ProfileDTO updateAttach(MultipartFile file) {
+    public ProfileDTO updatePhoto(MultipartFile file) {
         ProfileEntity entity = SecurityUtil.getProfile();
-        Objects.requireNonNull(entity);
+//        Objects.requireNonNull(entity);
 
-        attachService.deleteAttach(entity.getPhotoId());
+        if(attachService.getAttach(entity.getPhotoId()) != null) {
+            attachService.deleteAttach(entity.getPhotoId());
+        }
         AttachDTO attachDTO = attachService.saveAttach(file);
         if (attachDTO == null) {
-            throw new AppBadException("Attach not found");
+            throw new AppBadException("Photo not found");
         }
-
         entity.setPhotoId(attachDTO.getId());
         profileRepository.save(entity);
         return toDTOUser(entity);
@@ -162,7 +154,7 @@ public class ProfileService {
         emailService.create(email,title, text); // create history
     }
 
-    public String verification(String userId) {
+    public String emailUpdateVerification(String userId) {
         Optional<ProfileEntity> optional = profileRepository.findById(userId);
         if (optional.isEmpty()) {
             throw new AppBadException("User not found");
@@ -171,11 +163,6 @@ public class ProfileService {
         ProfileEntity entity = optional.get();
         emailService.isNotExpiredEmail(entity.getTempEmail());// check for expireation date
 
-        if (!entity.getStatus().equals(ProfileStatus.REGISTRATION)) {
-            throw new AppBadException("Registration not completed");
-        }
-
-        profileRepository.updateStatus(userId, ProfileStatus.ACTIVE);
         profileRepository.updateEmail(userId, entity.getTempEmail());
         return "Success";
     }

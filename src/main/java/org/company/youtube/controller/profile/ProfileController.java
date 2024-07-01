@@ -3,29 +3,26 @@ package org.company.youtube.controller.profile;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.company.youtube.dto.profile.ProfileCreateDTO;
 import org.company.youtube.dto.profile.ProfileDTO;
 import org.company.youtube.dto.profile.ProfileUpdateDTO;
 import org.company.youtube.service.profile.ProfileService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/profile")
+@RequiredArgsConstructor
 public class ProfileController {
 
     private final ProfileService profileService;
 
-    public ProfileController(ProfileService profileService) {
-        this.profileService = profileService;
-    }
-
     //    	1. Change password
 
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PutMapping("/current/change-password")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<Boolean> changePassword(
             @RequestParam String oldPassword,
             @RequestParam String newPassword,
@@ -35,7 +32,6 @@ public class ProfileController {
 
     //    	2. Update Email (with email verification)
 
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PutMapping("/current/update-email/{email}")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<String> updateEmail(
@@ -46,7 +42,7 @@ public class ProfileController {
     @Operation(summary = "Verification", description = "Api for auth Verification")
     @GetMapping("/verification/{userId}")
     public ResponseEntity<String> verificationByEmail(@PathVariable("userId") String userId) {
-        String response = profileService.verification(userId);
+        String response = profileService.emailUpdateVerification(userId);
         return ResponseEntity.ok().body(response);
     }
 
@@ -59,24 +55,24 @@ public class ProfileController {
 
 //	    3. Update Profile Detail(name,surname)
 
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PutMapping("/current/update")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ProfileDTO> update(@Valid @RequestBody ProfileUpdateDTO profile) {
         return ResponseEntity.ok().body(profileService.update(profile));
     }
 
 //	    4. Update Profile Attach (main_photo) (delete old attach
 
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PutMapping("/current/update-attach")
-    public ResponseEntity<ProfileDTO> updateAttach(@RequestParam("image") MultipartFile file) {
-        return ResponseEntity.ok().body(profileService.updateAttach(file));
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<ProfileDTO> updatePhoto(@RequestParam("image") MultipartFile file) {
+        return ResponseEntity.ok().body(profileService.updatePhoto(file));
     }
 
 //	    5. Get Profile Detail (id,name,surname,email,main_photo((url)))
 
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("/user/current")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ProfileDTO> getUserDetail() {
         return ResponseEntity.ok().body(profileService.getUserDetail());
     }
@@ -84,6 +80,7 @@ public class ProfileController {
 //         (id,name,surname,email,Role(ADMIN,MODERATOR))
 
     @PostMapping("/adm/create") // ADMIN
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ProfileDTO> create(@Valid @RequestBody ProfileCreateDTO profile) {
         ProfileDTO response = profileService.create(profile);
         return ResponseEntity.ok().body(response);
