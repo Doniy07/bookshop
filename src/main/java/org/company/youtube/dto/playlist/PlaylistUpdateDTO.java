@@ -6,4 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PlaylistUpdateDTO {
+
+    private String description;
+    private String orderNum;
+
 }

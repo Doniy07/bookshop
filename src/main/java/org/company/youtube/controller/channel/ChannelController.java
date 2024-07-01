@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.company.youtube.dto.channel.ChannelCreateDTO;
 import org.company.youtube.dto.channel.ChannelDTO;
 import org.company.youtube.dto.channel.ChannelUpdateDTO;
+import org.company.youtube.enums.ChannelStatus;
 import org.company.youtube.service.channel.ChannelService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,15 +50,26 @@ public class ChannelController {
     }
 
     //    6. Get Channel By Id
+
     @GetMapping("/channel/{channelId}")
     public ResponseEntity<ChannelDTO> getChannelById(@PathVariable String channelId) {
         return ResponseEntity.ok().body(channelService.getChannel(channelId));
     }
 
     //        7. Change Channel Status (ADMIN,USER and OWNER)
+
     @PutMapping("/change-status/{channelId}")
-    public ResponseEntity<ChannelDTO> changeStatus(@PathVariable String channelId) {
-        return ResponseEntity.ok().body(channelService.changeStatus(channelId));
+    public ResponseEntity<ChannelDTO> changeStatus(@PathVariable String channelId,
+                                                   @RequestParam("status") ChannelStatus status) {
+        return ResponseEntity.ok().body(channelService.changeStatus(channelId, status));
     }
 
+//    8. User Channel List (murojat qilgan userni)
+
+//    @GetMapping("/user-channel-list/{userId}")
+//    public ResponseEntity<ChannelDTO> getUserChannelList(@RequestParam(value = "page", defaultValue = "1") int page,
+//                                                         @RequestParam(value = "size", defaultValue = "10") int size,
+//                                                         @PathVariable String userId) {
+//        return ResponseEntity.ok().body(channelService.getUserChannelList(userId, page - 1, size));
+//    }
 }
