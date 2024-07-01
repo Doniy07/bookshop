@@ -3,7 +3,9 @@ package org.company.youtube.service.playlist;
 import lombok.RequiredArgsConstructor;
 import org.company.youtube.dto.playlist.PlaylistCreateDTO;
 import org.company.youtube.dto.playlist.PlaylistDTO;
+import org.company.youtube.dto.playlist.PlaylistUpdateDTO;
 import org.company.youtube.entity.playlist.PlaylistEntity;
+import org.company.youtube.enums.PlaylistStatus;
 import org.company.youtube.exception.AppBadException;
 import org.company.youtube.repository.playlist.PlaylistRepository;
 import org.springframework.stereotype.Service;
@@ -43,5 +45,27 @@ public class PlaylistService {
             throw new AppBadException("Channel not found");
         }
         return optional.get();
+    }
+
+    public PlaylistDTO update(String playlistId, PlaylistUpdateDTO dto) {
+
+        PlaylistEntity entity = getPlaylistById(playlistId);
+        entity.setDescription(dto.getDescription());
+        entity.setOrderNum(dto.getOrderNum());
+        entity = playlistRepository.save(entity);
+        return toDTO(entity);
+
+    }
+
+    public PlaylistDTO changeStatus(String playlistId, PlaylistStatus status) {
+
+        PlaylistEntity entity = getPlaylistById(playlistId);
+        if (entity.getStatus().equals(status)) {
+            return toDTO(entity);
+        }
+        entity.setStatus(status);
+        entity = playlistRepository.save(entity);
+        return toDTO(entity);
+
     }
 }
