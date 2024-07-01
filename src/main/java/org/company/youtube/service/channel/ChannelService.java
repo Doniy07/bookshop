@@ -6,7 +6,6 @@ import org.company.youtube.dto.channel.ChannelCreateDTO;
 import org.company.youtube.dto.channel.ChannelDTO;
 import org.company.youtube.dto.channel.ChannelUpdateDTO;
 import org.company.youtube.entity.channel.ChannelEntity;
-import org.company.youtube.entity.profile.ProfileEntity;
 import org.company.youtube.enums.ChannelStatus;
 import org.company.youtube.enums.ProfileRole;
 import org.company.youtube.exception.AppBadException;
@@ -50,24 +49,22 @@ public class ChannelService {
         return dto;
     }
 
-    public ChannelDTO update(ChannelUpdateDTO dto) {
-        ChannelEntity entity = getChannelEntityByProfileId();
+    public ChannelDTO update(String channelId, ChannelUpdateDTO dto) {
+        ChannelEntity entity = getChannelById(channelId);
+        if (!entity.getProfileId().equals(SecurityUtil.getProfileId())) {
+            throw new AppBadException("You are not owner of this channel");
+        }
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
         channelRepository.save(entity);
         return toDTO(entity);
     }
 
-    public ChannelEntity getChannelEntityByProfileId() {
-        Optional<ChannelEntity> optional = channelRepository.findByProfileId(SecurityUtil.getProfileId());
-        if (optional.isEmpty()) {
-            throw new AppBadException("Channel not found");
+    public ChannelDTO updatePhoto(String channelId, MultipartFile file) {
+        ChannelEntity entity = getChannelById(channelId);
+        if (!entity.getProfileId().equals(SecurityUtil.getProfileId())) {
+            throw new AppBadException("You are not owner of this channel");
         }
-        return optional.get();
-    }
-
-    public ChannelDTO updatePhoto(MultipartFile file) {
-        ChannelEntity entity = getChannelEntityByProfileId();
         attachService.deleteAttach(entity.getPhotoId());
         AttachDTO attachDTO = attachService.saveAttach(file);
         entity.setPhotoId(attachDTO.getId());
@@ -75,8 +72,11 @@ public class ChannelService {
         return toDTO(entity);
     }
 
-    public ChannelDTO updateBanner(MultipartFile file) {
-        ChannelEntity entity = getChannelEntityByProfileId();
+    public ChannelDTO updateBanner(String channelId, MultipartFile file) {
+        ChannelEntity entity = getChannelById(channelId);
+        if (!entity.getProfileId().equals(SecurityUtil.getProfileId())) {
+            throw new AppBadException("You are not owner of this channel");
+        }
         attachService.deleteAttach(entity.getBannerId());
         AttachDTO attachDTO = attachService.saveAttach(file);
         entity.setBannerId(attachDTO.getId());
@@ -84,7 +84,7 @@ public class ChannelService {
         return toDTO(entity);
     }
 
-    public ChannelEntity getChannel(String channelId) {
+    public ChannelEntity getChannelById(String channelId) {
         Optional<ChannelEntity> optional = channelRepository.findById(channelId);
         if (optional.isEmpty()) {
             throw new AppBadException("Channel not found");
@@ -92,17 +92,17 @@ public class ChannelService {
         return optional.get();
     }
 
-    public ChannelDTO getChannelById(String channelId) {
-        return toDTO(getChannel(channelId));
+    public ChannelDTO getChannel(String channelId) {
+        return toDTO(getChannelById(channelId));
     }
 
     public ChannelDTO changeStatus(String channelId) {
-        ProfileEntity profile = SecurityUtil.getProfile();
-        ChannelEntity entity;
-        if (!profile.getRole().equals(ProfileRole.ROLE_ADMIN)){
-            entity = getChannelEntityByProfileId();
-        }else {
-            entity = getChannel(channelId);
+        ChannelEntity entity = getChannelById(channelId);
+        if(!SecurityUtil.getProfile().getRole().equals(ProfileRole.ROLE_ADMIN)){
+            throw new AppBadException("You are not ADMIN");
+        }
+        if (!entity.getProfileId().equals(SecurityUtil.getProfileId())) {
+            throw new AppBadException("You are not owner of this channel");
         }
         if (!entity.getStatus().equals(ChannelStatus.ACTIVE)){
             throw new AppBadException("Channel already BLOCKED");
