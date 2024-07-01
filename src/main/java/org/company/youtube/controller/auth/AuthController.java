@@ -3,6 +3,7 @@ package org.company.youtube.controller.auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.company.youtube.dto.auth.LoginDTO;
 import org.company.youtube.dto.auth.RegistrationDTO;
@@ -16,17 +17,15 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @RestController
 @RequestMapping("/auth")
+@AllArgsConstructor
 @Tag(name = "Auth Controller", description = "Api list for Auth")
 public class AuthController {
 
     private final AuthService authService;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
-
     //    	1. Registration (with email verification)
 //	     id,name,surname,email,main_photo (url)
+
     @Operation(summary = "Registration", description = "Api for auth registration")
     @PostMapping("/registration")
     public ResponseEntity<String> registrationByEmail(@Valid @RequestBody RegistrationDTO dto) {
@@ -43,6 +42,7 @@ public class AuthController {
     }
 
     // resend by email
+
     @Operation(summary = "Registration Resend", description = "Api for auth Registration Resend")
     @GetMapping("/registration/resend/{email}")
     public ResponseEntity<String> registrationResend(@PathVariable("email") String email) {
@@ -51,6 +51,7 @@ public class AuthController {
     }
 
     //	    2. Authorization
+
     @Operation(summary = "Login", description = "Api for auth Login")
     @PostMapping("/login")
     public HttpEntity<ProfileDTO> loginUser(@RequestBody LoginDTO loginDto) {
