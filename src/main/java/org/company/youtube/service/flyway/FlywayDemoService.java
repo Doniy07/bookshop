@@ -1,17 +1,18 @@
 package org.company.youtube.service.flyway;
 
+import lombok.RequiredArgsConstructor;
 import org.flywaydb.core.Flyway;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.sql.DataSource;
 
 @SpringBootApplication
+@RequiredArgsConstructor
 public class FlywayDemoService implements CommandLineRunner {
 
-    @Autowired
-    private DataSource dataSource;
+    private final DataSource dataSource;
+
 //    public static void main(String[] args) {
 //        SpringApplication.run(FlywayDemoService.class, args);
 //    }
