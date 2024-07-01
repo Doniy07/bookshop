@@ -1,5 +1,7 @@
 package org.company.youtube.service.email;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.company.youtube.entity.email.EmailEntity;
 import org.company.youtube.exception.AppBadException;
 import org.company.youtube.repository.email.EmailRepository;
@@ -9,13 +11,10 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class EmailService {
 
     private final EmailRepository emailRepository;
-
-    public EmailService(EmailRepository emailRepository) {
-        this.emailRepository = emailRepository;
-    }
 
 //    public List<EmailDTO> getByEmail(String email) {
 //        return emailRepository.findAllByEmail(email)
@@ -40,7 +39,6 @@ public class EmailService {
 //       dto.setCreatedDate(entity.getCreatedDate());
 //       return dto;
 //   }
-
     public void checkEmailLimit(String email) {
         LocalDateTime to = LocalDateTime.now();
         LocalDateTime from = to.minusMinutes(2);
@@ -61,9 +59,6 @@ public class EmailService {
             throw new AppBadException("Confirmation time expired");
         }
     }
-
-    
-
 
 //    public PageImpl<EmailDTO> pagination(int page, int size) {
 //        Pageable pageable = PageRequest.of(page, size);
