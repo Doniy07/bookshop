@@ -12,6 +12,7 @@ public class PlaylistDTO {
     private String id;
     private String channelId;
     private ChannelDTO channel;
+    private String name;
     private String description;
     private String orderNum;
     private PlaylistStatus status;

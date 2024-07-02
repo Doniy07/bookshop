@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class PlaylistUpdateDTO {
 
+    private String name;
     private String description;
     private String orderNum;
 

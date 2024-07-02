@@ -26,6 +26,9 @@ public class PlaylistEntity {
     @JoinColumn(name = "channel_id", updatable = false, insertable = false)
     private AttachEntity channel;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "description")
     private String description;
 

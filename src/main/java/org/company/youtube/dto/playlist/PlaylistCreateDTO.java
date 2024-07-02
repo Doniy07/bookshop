@@ -9,6 +9,7 @@ import org.company.youtube.enums.PlaylistStatus;
 public class PlaylistCreateDTO {
 
     private String channelId;
+    private String name;
     private String description;
     private String orderNum;
     private PlaylistStatus status;
