@@ -1,8 +1,7 @@
 package org.company.youtube.entity.profile;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.company.youtube.entity.attach.AttachEntity;
 import org.company.youtube.enums.ProfileRole;
 import org.company.youtube.enums.ProfileStatus;
@@ -10,8 +9,7 @@ import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "profile")
 public class ProfileEntity {

@@ -9,6 +9,6 @@ public class PlaylistUpdateDTO {
 
     private String name;
     private String description;
-    private String orderNum;
+    private Integer orderNum;
 
 }

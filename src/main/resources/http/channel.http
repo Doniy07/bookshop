@@ -1,0 +1,12 @@
+
+### Create channel
+POST http://localhost:8080/channel/create
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MjA2MzU3MjAsImlkIjoiMWJhNGY0ZGUtNWIzYS00NjU1LTgyYzctYWExYWRkZTcyMDQwIiwiZW1haWwiOiJka3V5bGl5ZXZAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJleHAiOjE3MjA3MjIxMjAsImlzcyI6IllvdXR1YmUifQ.HRxHWAJESXFeTnABz7qBDlBB-BNmLP5VK3UohRhrDHl1FLxzFZ2HiUZfErEoqIvPRn4KjvMQ6CTVc93RoFK4fw
+
+{
+  "name": "Doni-dev",
+  "photoId": "a89d27a2-f4a8-4313-8e80-c08baff33750.jpg",
+  "description": "Developer channel",
+  "bannerId": "a42c5043-deba-4ad0-8cfc-4832fb83e8bb.jpg"
+}

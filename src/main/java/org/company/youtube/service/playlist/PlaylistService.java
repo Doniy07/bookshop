@@ -7,8 +7,14 @@ import org.company.youtube.dto.playlist.PlaylistUpdateDTO;
 import org.company.youtube.entity.playlist.PlaylistEntity;
 import org.company.youtube.enums.PlaylistStatus;
 import org.company.youtube.exception.AppBadException;
+import org.company.youtube.mapper.PlaylistInfoMapper;
 import org.company.youtube.repository.playlist.PlaylistRepository;
-import org.springframework.data.domain.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +41,7 @@ public class PlaylistService {
 
     private PlaylistDTO toDTO(PlaylistEntity entity) {
         PlaylistDTO dto = new PlaylistDTO();
+        dto.setId(entity.getId());
         dto.setChannelId(entity.getChannelId());
         dto.setName(entity.getName());
         dto.setDescription(entity.getDescription());
@@ -43,7 +50,7 @@ public class PlaylistService {
         return dto;
     }
 
-    public PlaylistEntity getPlaylistById(String playlistId) {
+    private PlaylistEntity getPlaylistById(String playlistId) {
         Optional<PlaylistEntity> optional = playlistRepository.findById(playlistId);
         if (optional.isEmpty()) {
             throw new AppBadException("Channel not found");
@@ -83,23 +90,62 @@ public class PlaylistService {
 
     }
 
-    private List<PlaylistDTO> iterateStream(List<PlaylistEntity> articles) {
-        return articles.stream()
-                .map(this::toDTO)
-                .toList();
+    public PageImpl<PlaylistInfoMapper> pagination(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PlaylistInfoMapper> list = playlistRepository.findAllPagination(pageable);
+        return new PageImpl<>(list.getContent(), list.getPageable(), list.getTotalElements());
     }
 
-
-    public PageImpl<PlaylistDTO> pagination(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
-
-        Page<PlaylistEntity> list = playlistRepository.findAll(pageable);
-        return new PageImpl<>(iterateStream(list.getContent()), list.getPageable(), list.getTotalElements());
+    public JSONArray getPlaylistsByUserId(String userId) {
+        List<Object[]> results = playlistRepository.findPlaylistsByUserId(userId);
+        return getPlayListShortInfo(results);
     }
 
-    public PageImpl<PlaylistDTO> paginationByUserId(int page, int size, String userId) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
-        Page<PlaylistEntity> list = playlistRepository.findAllByUserId(userId,(pageable));
-        return new PageImpl<>(iterateStream(list.getContent()), list.getPageable(), list.getTotalElements());
+    public PageImpl<PlaylistInfoMapper> getUserPlaylist(int page, int size, String userId) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PlaylistInfoMapper> mapperList = playlistRepository.getUserPlaylist(userId, pageable);
+        return new PageImpl<>(mapperList.getContent(), pageable, mapperList.getTotalElements());
+    }
+
+    public JSONArray getChannelPlaylist(String channelId) {
+        List<Object[]> results = playlistRepository.getChannelPlaylist(channelId);
+        return getPlayListShortInfo(results);
+    }
+
+    public JSONArray getPlayListShortInfo(List<Object[]> results) {
+        JSONArray playlists = new JSONArray();
+
+        for (Object[] row : results) {
+            JSONObject playlist = new JSONObject();
+            playlist.put("playlist_id", row[0]);
+            playlist.put("playlist_name", row[1]);
+            playlist.put("created_date", row[2]);
+            playlist.put("channel_id", row[3]);
+            playlist.put("channel_name", row[4]);
+            playlist.put("video_count", row[5]);
+            playlist.put("video_list", new JSONArray(row[6].toString()));
+
+            playlists.put(playlist);
+        }
+        return playlists;
+    }
+
+    public JSONArray getPlaylist(String playlistId) {
+
+        List<Object[]> results = playlistRepository.getPlaylistById(playlistId);
+
+        JSONArray playlists = new JSONArray();
+
+        for (Object[] row : results) {
+            JSONObject playlist = new JSONObject();
+            playlist.put("playlist_id", row[0]);
+            playlist.put("playlist_name", row[1]);
+            playlist.put("video_count", row[2]);
+            playlist.put("total_view_count", row[3]);
+            playlist.put("last_update_date", row[4]);
+
+            playlists.put(playlist);
+        }
+        return playlists;
     }
 }

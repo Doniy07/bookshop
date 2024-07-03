@@ -1,12 +1,12 @@
 package org.company.youtube.dto.email;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class EmailDTO {
     private String id;
     private String toEmail;

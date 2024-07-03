@@ -1,20 +1,22 @@
 package org.company.youtube.entity.tag;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import org.company.youtube.entity.video.VideoEntity;
+import org.company.youtube.entity.video.VideoTagEntity;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table
-@Getter
-@Setter
+@Data
+@Table(name = "tag")
 public class TagEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @UuidGenerator
+    private String id;
 
     @Column(name = "name")
     private String name;
@@ -24,4 +26,7 @@ public class TagEntity {
 
     @Column(name = "created_date")
     private LocalDateTime createdDate = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "tag", fetch = FetchType.LAZY)
+    private List<VideoTagEntity> videos;
 }

@@ -11,7 +11,7 @@ public class PlaylistCreateDTO {
     private String channelId;
     private String name;
     private String description;
-    private String orderNum;
+    private Integer orderNum;
     private PlaylistStatus status;
 
 }

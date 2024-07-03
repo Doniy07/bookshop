@@ -5,16 +5,17 @@ import org.company.youtube.dto.attach.AttachDTO;
 import org.company.youtube.dto.channel.ChannelCreateDTO;
 import org.company.youtube.dto.channel.ChannelDTO;
 import org.company.youtube.dto.channel.ChannelUpdateDTO;
-import org.company.youtube.dto.playlist.PlaylistDTO;
 import org.company.youtube.entity.channel.ChannelEntity;
-import org.company.youtube.entity.playlist.PlaylistEntity;
 import org.company.youtube.enums.ChannelStatus;
 import org.company.youtube.enums.ProfileRole;
 import org.company.youtube.exception.AppBadException;
 import org.company.youtube.repository.channel.ChannelRepository;
 import org.company.youtube.service.attach.AttachService;
 import org.company.youtube.util.SecurityUtil;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -45,6 +46,7 @@ public class ChannelService {
 
         ChannelDTO dto = new ChannelDTO();
 
+        dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setDescription(entity.getDescription());
         dto.setBannerId(entity.getBannerId());
@@ -112,14 +114,14 @@ public class ChannelService {
     }
 
 
-//    public ChannelDTO getUserChannelList(int page, int size, String userId) {
-//        Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
-//        Page<ChannelEntity> mapperList = channelRepository.getUserChannelList(userId, pageable);
-//        return new PageImpl<>(iterateStream(mapperList.getContent()), mapperList.getPageable(), mapperList.getTotalElements());
-//    }
+    public Page<ChannelDTO> getUserChannelList(int page, int size, String userId) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ChannelEntity> mapperList = channelRepository.findByProfileIdOrderByCreatedDateDesc(userId, pageable);
+        return new PageImpl<>(iterateStream(mapperList.getContent()), mapperList.getPageable(), mapperList.getTotalElements());
+    }
 
-    private List<ChannelDTO> iterateStream(List<ChannelEntity> articles) {
-        return articles.stream()
+    private List<ChannelDTO> iterateStream(List<ChannelEntity> channels) {
+        return channels.stream()
                 .map(this::toDTO)
                 .toList();
     }

@@ -7,6 +7,7 @@ import org.company.youtube.dto.channel.ChannelDTO;
 import org.company.youtube.dto.channel.ChannelUpdateDTO;
 import org.company.youtube.enums.ChannelStatus;
 import org.company.youtube.service.channel.ChannelService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -66,10 +67,10 @@ public class ChannelController {
 
 //    8. User Channel List (murojat qilgan userni)
 
-//    @GetMapping("/user-channel-list/{userId}")
-//    public ResponseEntity<ChannelDTO> getUserChannelList(@RequestParam(value = "page", defaultValue = "1") int page,
-//                                                         @RequestParam(value = "size", defaultValue = "10") int size,
-//                                                         @PathVariable String userId) {
-//        return ResponseEntity.ok().body(channelService.getUserChannelList(userId, page - 1, size));
-//    }
+    @GetMapping("/user-channel-list/{userId}")
+    public ResponseEntity<Page<ChannelDTO>> getUserChannelList(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                               @RequestParam(value = "size", defaultValue = "10") int size,
+                                                               @PathVariable("userId") String userId) {
+        return ResponseEntity.ok().body(channelService.getUserChannelList( page - 1, size,userId));
+    }
 }

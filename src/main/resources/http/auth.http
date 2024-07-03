@@ -7,7 +7,7 @@ Content-Type: application/json
   "surname": "Aliyev",
   "email": "dkuyliyev@gmail.com",
   "password": "12345",
-  "photoId": "31ffc181-5eba-4b5d-9e8c-601881469e18.jpg"
+  "photoId": "a89d27a2-f4a8-4313-8e80-c08baff33750.jpg"
 }
 
 ### Login
@@ -15,7 +15,7 @@ POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "email": "muham6597@gmail.com",
+  "email": "dkuyliyev@gmail.com",
   "password": "12345"
 }
 

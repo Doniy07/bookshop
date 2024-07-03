@@ -2,6 +2,7 @@ package org.company.youtube.config;
 
 
 
+import lombok.RequiredArgsConstructor;
 import org.company.youtube.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,12 +20,11 @@ import org.springframework.stereotype.Component;
 @EnableWebSecurity
 @Component
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    private CustomUserDetailService customUserDetailService;
-    @Autowired
-    private JwtTokenFilter jwtTokenFilter;
+    private final CustomUserDetailService customUserDetailService;
+    private final JwtTokenFilter jwtTokenFilter;
 
 
     @Bean
@@ -57,6 +57,9 @@ public class SecurityConfig {
                     .requestMatchers("/profile/**").permitAll()
                     .requestMatchers("/attach/adm/**").hasRole("ADMIN")
                     .requestMatchers("/attach/**").permitAll()
+                    .requestMatchers("/channel/**").permitAll()
+                    .requestMatchers("/playlist/**").permitAll()
+                    .requestMatchers("/video/**").permitAll()
                     .requestMatchers("/category/adm/**").hasRole("ADMIN")
                     .requestMatchers("/tag/adm/**").hasRole("ADMIN")
                     .anyRequest()

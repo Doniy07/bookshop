@@ -48,16 +48,16 @@ public class AttachService {
                 folder.mkdirs();
             }
 
-            String key = UUID.randomUUID().toString(); // dasdasd-dasdasda-asdasda-asdasd
-            String type = getType(Objects.requireNonNull(file.getOriginalFilename())); // dasda.asdas.dasd.jpg
+            String key = UUID.randomUUID().toString();
+            String type = getType(Objects.requireNonNull(file.getOriginalFilename()));
             // save to system
             byte[] bytes = file.getBytes();
             Path path = Paths.get(attachUrl + pathFolder + "/" + key + "." + type);
             Files.write(path, bytes);
             // save to db
             AttachEntity entity = new AttachEntity();
-            entity.setId(key + "." + type); // dasdasd-dasdasda-asdasda-asdasd.jpg
-            entity.setPath(pathFolder); // 2024/06/08
+            entity.setId(key + "." + type);
+            entity.setPath(pathFolder);
             entity.setOriginalName(file.getOriginalFilename());
             entity.setSize(file.getSize());
             entity.setType(type);
@@ -85,9 +85,8 @@ public class AttachService {
     }
 
     public AttachEntity getAttach(String id) {
-        return attachRepository.findById(id).orElseThrow(() -> {
-            throw new AppBadException("Attach not found");
-        });
+        return attachRepository.findById(id)
+                .orElseThrow(() -> new AppBadException("Attach not found"));
     }
 
     public String getYmDString() {
@@ -98,8 +97,7 @@ public class AttachService {
         return year + "/" + month + "/" + day; // 2024/06/08
     }
 
-    public String getType(String fileName) { // mp3/jpg/npg/mp4.....
-        // zari.mazgi.jpg
+    public String getType(String fileName) {
         int lastIndex = fileName.lastIndexOf(".");
         return fileName.substring(lastIndex + 1);
     }
@@ -109,8 +107,6 @@ public class AttachService {
         dto.setId(entity.getId());
         dto.setOriginalName(entity.getOriginalName());
         dto.setSize(entity.getSize());
-//        dto.setType(entity.getType());
-//        dto.setCreatedData(entity.getCreatedData());
         dto.setUrl(serverUrl + "/attach/open/" + entity.getId());
         return dto;
     }
@@ -170,23 +166,23 @@ public class AttachService {
                 .toList();
     }
 
-    public byte[] load(String attachId) {
-        BufferedImage originalImage;
-        try {
-            // read from db
-            AttachEntity entity = getAttach(attachId);
-            originalImage = ImageIO.read(new File(attachUrl + entity.getPath() + "/" + attachId));
-            // read from system
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(originalImage, entity.getType(), baos);
-
-            baos.flush();
-            byte[] imageInByte = baos.toByteArray();
-            baos.close();
-            return imageInByte;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new byte[0];
-        }
-    }
+//    public byte[] load(String attachId) {
+//        BufferedImage originalImage;
+//        try {
+//
+//            AttachEntity entity = getAttach(attachId);
+//            originalImage = ImageIO.read(new File(attachUrl + entity.getPath() + "/" + attachId));
+//
+//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//            ImageIO.write(originalImage, entity.getType(), baos);
+//
+//            baos.flush();
+//            byte[] imageInByte = baos.toByteArray();
+//            baos.close();
+//            return imageInByte;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return new byte[0];
+//        }
+//    }
 }

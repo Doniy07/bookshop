@@ -1,16 +1,22 @@
 package org.company.youtube.dto.tag;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TagDTO {
 
-    private Integer id;
+    private String id;
     private String name;
     private Boolean visible;
     private LocalDateTime createdDate;

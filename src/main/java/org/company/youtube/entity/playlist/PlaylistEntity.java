@@ -1,18 +1,22 @@
 package org.company.youtube.entity.playlist;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.company.youtube.dto.attach.AttachDTO;
-import org.company.youtube.entity.attach.AttachEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.company.youtube.entity.channel.ChannelEntity;
 import org.company.youtube.enums.PlaylistStatus;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "playlist")
 public class PlaylistEntity {
 
@@ -24,7 +28,7 @@ public class PlaylistEntity {
     private String channelId;
     @ManyToOne
     @JoinColumn(name = "channel_id", updatable = false, insertable = false)
-    private AttachEntity channel;
+    private ChannelEntity channel;
 
     @Column(name = "name")
     private String name;
@@ -33,15 +37,24 @@ public class PlaylistEntity {
     private String description;
 
     @Column(name = "order_num")
-    private String orderNum;
+    private Integer orderNum;
+
+    @Column(name = "video_count")
+    private Integer videoCount;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private PlaylistStatus status;
 
+    @Builder.Default
     @Column(name = "visible")
     private Boolean visible = Boolean.TRUE;
 
+    @Builder.Default
     @Column(name = "created_date")
     private LocalDateTime createdDate = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "playlist", fetch = FetchType.LAZY)
+    private List<PlaylistVideoEntity> videos;
+
 }

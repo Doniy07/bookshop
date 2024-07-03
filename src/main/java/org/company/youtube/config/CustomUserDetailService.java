@@ -2,6 +2,7 @@ package org.company.youtube.config;
 
 
 
+import lombok.RequiredArgsConstructor;
 import org.company.youtube.entity.profile.ProfileEntity;
 import org.company.youtube.repository.profile.ProfileRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,12 +13,9 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
     private final ProfileRepository repository;
-
-    public CustomUserDetailService(ProfileRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
