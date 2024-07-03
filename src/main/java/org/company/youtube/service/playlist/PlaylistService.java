@@ -31,7 +31,6 @@ public class PlaylistService {
         entity.setStatus(dto.getStatus());
         entity = playlistRepository.save(entity);
         return toDTO(entity);
-
     }
 
     private PlaylistDTO toDTO(PlaylistEntity entity) {

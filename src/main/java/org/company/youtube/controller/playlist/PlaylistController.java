@@ -2,8 +2,6 @@ package org.company.youtube.controller.playlist;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.company.youtube.dto.channel.ChannelDTO;
-import org.company.youtube.dto.channel.ChannelUpdateDTO;
 import org.company.youtube.dto.playlist.PlaylistCreateDTO;
 import org.company.youtube.dto.playlist.PlaylistDTO;
 import org.company.youtube.dto.playlist.PlaylistUpdateDTO;
