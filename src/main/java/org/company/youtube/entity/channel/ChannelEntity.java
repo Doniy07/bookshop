@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "/channel")
+@Table(name = "channel")
 public class ChannelEntity {
 
     @Id

@@ -35,7 +35,7 @@ public class PlaylistController {
 
 //    3. Change Playlist Status (USER and OWNER)
 
-    @PostMapping("/update/{playlistId}")
+    @PostMapping("/change-status/{playlistId}")
     public ResponseEntity<PlaylistDTO> changeStatus(@PathVariable String playlistId,
                                                     @Valid @RequestBody PlaylistStatus status) {
         return ResponseEntity.ok().body(playlistService.changeStatus(playlistId, status));

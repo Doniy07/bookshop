@@ -2,6 +2,7 @@ package org.company.youtube.config;
 
 
 
+import lombok.RequiredArgsConstructor;
 import org.company.youtube.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,12 +20,11 @@ import org.springframework.stereotype.Component;
 @EnableWebSecurity
 @Component
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    private CustomUserDetailService customUserDetailService;
-    @Autowired
-    private JwtTokenFilter jwtTokenFilter;
+    private final CustomUserDetailService customUserDetailService;
+    private final JwtTokenFilter jwtTokenFilter;
 
 
     @Bean
