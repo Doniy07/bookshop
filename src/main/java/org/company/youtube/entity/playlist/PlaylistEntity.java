@@ -1,10 +1,7 @@
 package org.company.youtube.entity.playlist;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.company.youtube.entity.channel.ChannelEntity;
 import org.company.youtube.enums.PlaylistStatus;
 import org.hibernate.annotations.UuidGenerator;
@@ -12,7 +9,8 @@ import org.hibernate.annotations.UuidGenerator;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Builder
 @NoArgsConstructor
@@ -26,7 +24,7 @@ public class PlaylistEntity {
 
     @Column(name = "channel_id")
     private String channelId;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "channel_id", updatable = false, insertable = false)
     private ChannelEntity channel;
 

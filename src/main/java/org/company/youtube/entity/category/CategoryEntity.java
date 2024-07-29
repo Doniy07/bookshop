@@ -2,16 +2,17 @@ package org.company.youtube.entity.category;
 
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.company.youtube.entity.video.VideoEntity;
-import org.company.youtube.entity.video.VideoTagEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "category")
-@Data
+@Getter
+@Setter
 public class CategoryEntity {
 
     @Id

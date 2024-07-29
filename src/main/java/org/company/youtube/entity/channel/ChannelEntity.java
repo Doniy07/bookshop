@@ -1,18 +1,20 @@
 package org.company.youtube.entity.channel;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.company.youtube.entity.attach.AttachEntity;
 import org.company.youtube.entity.profile.ProfileEntity;
+import org.company.youtube.entity.subscription.SubscriptionEntity;
 import org.company.youtube.entity.video.VideoEntity;
-import org.company.youtube.entity.video.VideoTagEntity;
 import org.company.youtube.enums.ChannelStatus;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "channel")
 public class ChannelEntity {
@@ -55,4 +57,6 @@ public class ChannelEntity {
     @OneToMany(mappedBy = "channel", fetch = FetchType.LAZY)
     private List<VideoEntity> videos;
 
+    @OneToMany(mappedBy = "channel", fetch = FetchType.LAZY)
+    private List<SubscriptionEntity> subscriptions;
 }

@@ -1,13 +1,11 @@
 package org.company.youtube.entity.video;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.company.youtube.entity.attach.AttachEntity;
 import org.company.youtube.entity.category.CategoryEntity;
 import org.company.youtube.entity.channel.ChannelEntity;
+import org.company.youtube.entity.comment.CommentEntity;
 import org.company.youtube.enums.VideoStatus;
 import org.company.youtube.enums.VideoType;
 import org.hibernate.annotations.UuidGenerator;
@@ -15,7 +13,8 @@ import org.hibernate.annotations.UuidGenerator;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,7 +28,7 @@ public class VideoEntity {
 
     @Column(name = "preview_attach_id")
     private String previewAttachId;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "preview_attach_id", insertable = false, updatable = false)
     private AttachEntity previewAttachPhoto;
 
@@ -41,19 +40,19 @@ public class VideoEntity {
 
     @Column(name = "channel_id")
     private String channelId;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "channel_id", updatable = false, insertable = false)
     private ChannelEntity channel;
 
     @Column(name = "category_id")
     private Integer categoryId;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", updatable = false, insertable = false)
     private CategoryEntity category;
 
     @Column(name = "attach_id")
     private String videoId;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "attach_id", insertable = false, updatable = false)
     private AttachEntity video;
 
@@ -90,4 +89,7 @@ public class VideoEntity {
 
     @OneToMany(mappedBy = "video", fetch = FetchType.LAZY)
     private List<VideoTagEntity> tags;
+
+    @OneToMany(mappedBy = "video", fetch = FetchType.LAZY)
+    private List<CommentEntity> comments;
 }

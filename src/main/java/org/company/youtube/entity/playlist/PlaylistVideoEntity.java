@@ -1,10 +1,7 @@
 package org.company.youtube.entity.playlist;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.company.youtube.entity.video.VideoEntity;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -14,7 +11,8 @@ import java.time.LocalDateTime;
  * entity for {@link org.company.youtube.dto.playlist.PlaylistVideoDTO}
  */
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "playlist_video")
 @Builder

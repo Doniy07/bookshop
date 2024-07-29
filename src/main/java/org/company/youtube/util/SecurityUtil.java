@@ -12,8 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class SecurityUtil {
     public static JwtDTO getJwtDTO(String token) {
         String jwt = token.substring(7); // Bearer eyJhb
-        JwtDTO dto = JWTUtil.decode(jwt);
-        return dto;
+        return JWTUtil.decode(jwt);
     }
 
     public static JwtDTO getJwtDTO(String token, ProfileRole requiredRole) {

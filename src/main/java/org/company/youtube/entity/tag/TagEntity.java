@@ -1,8 +1,8 @@
 package org.company.youtube.entity.tag;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import org.company.youtube.entity.video.VideoEntity;
+import lombok.Getter;
+import lombok.Setter;
 import org.company.youtube.entity.video.VideoTagEntity;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -10,7 +10,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "tag")
 public class TagEntity {
 
