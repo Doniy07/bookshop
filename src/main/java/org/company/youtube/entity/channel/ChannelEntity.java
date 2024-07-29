@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.company.youtube.entity.attach.AttachEntity;
 import org.company.youtube.entity.profile.ProfileEntity;
+import org.company.youtube.entity.subscription.SubscriptionEntity;
 import org.company.youtube.entity.video.VideoEntity;
 import org.company.youtube.entity.video.VideoTagEntity;
 import org.company.youtube.enums.ChannelStatus;
@@ -55,4 +56,6 @@ public class ChannelEntity {
     @OneToMany(mappedBy = "channel", fetch = FetchType.LAZY)
     private List<VideoEntity> videos;
 
+    @OneToMany(mappedBy = "channel", fetch = FetchType.LAZY)
+    private List<SubscriptionEntity> subscriptions;
 }

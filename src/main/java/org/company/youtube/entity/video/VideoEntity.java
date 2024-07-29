@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.company.youtube.entity.attach.AttachEntity;
 import org.company.youtube.entity.category.CategoryEntity;
 import org.company.youtube.entity.channel.ChannelEntity;
+import org.company.youtube.entity.comment.CommentEntity;
 import org.company.youtube.enums.VideoStatus;
 import org.company.youtube.enums.VideoType;
 import org.hibernate.annotations.UuidGenerator;
@@ -90,4 +91,7 @@ public class VideoEntity {
 
     @OneToMany(mappedBy = "video", fetch = FetchType.LAZY)
     private List<VideoTagEntity> tags;
+
+    @OneToMany(mappedBy = "video", fetch = FetchType.LAZY)
+    private List<CommentEntity> comments;
 }
