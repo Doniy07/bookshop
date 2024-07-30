@@ -22,7 +22,7 @@ public class ReportEntity {
     String id;
 
     @Column(name = "profile_id")
-    private Long profileId;
+    private String profileId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", insertable = false, updatable = false)
     private ProfileEntity profile;

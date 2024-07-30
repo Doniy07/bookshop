@@ -92,4 +92,7 @@ public class VideoEntity {
 
     @OneToMany(mappedBy = "video", fetch = FetchType.LAZY)
     private List<CommentEntity> comments;
+
+    @OneToMany(mappedBy = "video", fetch = FetchType.LAZY)
+    private List<VideoLikeEntity> likes;
 }

@@ -12,5 +12,6 @@ public class EmailDTO {
     private String toEmail;
     private String title;
     private String message;
+    private Boolean visible;
     private LocalDateTime createdDate;
 }

@@ -28,6 +28,9 @@ public class EmailEntity {
     @Column(name = "message", columnDefinition = "text")
     private String message;
 
+    @Column(name = "visible")
+    private Boolean visible = Boolean.TRUE;
+
     @Column(name = "created_date")
     private LocalDateTime createdDate = LocalDateTime.now();
 }

@@ -42,17 +42,17 @@ public class SubscriptionService implements SubscriptionUseCase<SubscriptionRequ
     }
 
 /*    @Override  // this is correct method "create"
-    public ApiResponse<SubscriptionResponse> create(SubscriptionRequest subscriptionRequest) {
+    public ApiResponse<String> create(SubscriptionRequest subscriptionRequest) {
         SubscriptionEntity check = subscriptionRepository.findByProfileIdAndChannelId(SecurityUtil.getProfileId(), subscriptionRequest.channelId());
         String oldType = String.valueOf(check.getType());
         if (check != null) {
 
-            check.setType(subscriptionRequest.type());
+            check.setType(subscriptionRequest.status());
             subscriptionRepository.save(check);
-            return new ApiResponse<>("Subscription type updated from: " + oldType + " to: " + subscriptionRequest.type() + " successfully" , 200);
+            return new ApiResponse<>("Subscription status updated from: " + oldType + " to: " + subscriptionRequest.status() + " successfully" , 200);
         }
         SubscriptionEntity entity = subscriptionRepository.save(mapToEntity().apply(subscriptionRequest));
-        return new ApiResponse<>("Subscription type created by name: " +  subscriptionRequest.type() + " and with id: " + entity.getId() + " successfully" , 200);
+        return new ApiResponse<>("Subscription status created by name: " +  subscriptionRequest.status() + " and with id: " + entity.getId() + " successfully" , 200);
 
     }*/
 

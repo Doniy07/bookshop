@@ -2,6 +2,8 @@ package org.company.youtube.repository.email;
 
 
 import org.company.youtube.entity.email.EmailEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -16,10 +18,7 @@ public interface EmailRepository extends CrudRepository<EmailEntity, String>,
 
     Optional<EmailEntity> findTop1ByToEmailOrderByCreatedDateDesc(String email);
 
-//    @Query(value = "select id, to_email,title, message, date(created_date) as created_date from email_history where created_date between ?1 and ?2", nativeQuery = true)
-//    List<EmailEntity> findByCreatedDate(LocalDate fromDate, LocalDate toDate);
-
     long countByToEmailAndCreatedDateBetween(String email, LocalDateTime from, LocalDateTime to);
 
-//    List<EmailEntity> findAllByEmail(String email);
+    Page<EmailEntity> findAllByToEmail(String email, Pageable pageable);
 }

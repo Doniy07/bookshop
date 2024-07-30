@@ -10,10 +10,10 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Table(name = "video_like_entity")
 public class VideoLikeEntity {
     @Id
@@ -32,8 +32,9 @@ public class VideoLikeEntity {
     @JoinColumn(name = "video_id", insertable = false, updatable = false)
     private VideoEntity video;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "type")
-    private EmotionStatus type;
+    private EmotionStatus status;
 
     @Builder.Default
     @Column(name = "created_date")

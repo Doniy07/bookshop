@@ -37,7 +37,7 @@ public class SubscriptionController {
         return ResponseEntity.ok().body(subscriptionUseCase.changeStatus(request));
     }
 
-//    3. Change Subscription Notification type (USER)
+//    3. Change Subscription Notification status (USER)
 //        channel_id,notification_type
 
     @GetMapping("/change-notification-type")

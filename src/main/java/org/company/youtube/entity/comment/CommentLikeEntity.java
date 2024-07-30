@@ -34,8 +34,9 @@ public class CommentLikeEntity {
     @JoinColumn(name = "comment_id", insertable = false, updatable = false)
     private CommentEntity comment;
 
-    @Column(name = "type")
-    private EmotionStatus type;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private EmotionStatus status;
 
     @Builder.Default
     @Column(name = "created_date")
