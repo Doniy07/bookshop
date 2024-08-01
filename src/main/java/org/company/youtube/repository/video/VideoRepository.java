@@ -13,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface VideoRepository extends JpaRepository<VideoEntity, String>,
@@ -28,9 +29,45 @@ public interface VideoRepository extends JpaRepository<VideoEntity, String>,
     @Query("UPDATE VideoEntity set sharedCount = COALESCE(sharedCount,0) + 1 where id =?1")
     void increaseShareCount(String articleId);
 
-    Page<VideoShortInfoMapper> findByCategoryIdOrderByCreatedDateDesc(String categoryId, Pageable pageable);
+    @Query(value = "  SELECT v.id AS videoId," +
+            " v.title AS videoTitle, " +
+            " v.previewAttachId AS videoPreviewAttachId, " +
+            " v.publishedDate AS videoPublishedDate, " +
+            " c.id AS channelId," +
+            " c.name AS channelName," +
+            " c.photoId AS channelPhotoId, " +
+            " v.viewCount AS videoViewCount " +
+            " FROM VideoEntity v " +
+            " INNER JOIN v.tags vt " +
+            " INNER JOIN v.channel c " +
+            " WHERE v.categoryId = ?1 " +
+            " ORDER BY v.createdDate DESC ",
+            countQuery = " SELECT count(v.id) " +
+                    " FROM VideoEntity v " +
+                    " INNER JOIN v.tags vt " +
+                    " INNER JOIN v.channel c " +
+                    " WHERE v.categoryId = ?1 ")
+    Page<VideoShortInfoMapper> findByCategoryId(String categoryId, Pageable pageable);
 
-    Page<VideoShortInfoMapper> findByTitleContainingIgnoreCaseOrderByCreatedDateDesc(String title, Pageable pageable);
+    @Query(value = "  SELECT v.id AS videoId," +
+            " v.title AS videoTitle, " +
+            " v.previewAttachId AS videoPreviewAttachId, " +
+            " v.publishedDate AS videoPublishedDate, " +
+            " c.id AS channelId," +
+            " c.name AS channelName," +
+            " c.photoId AS channelPhotoId, " +
+            " v.viewCount AS videoViewCount " +
+            " FROM VideoEntity v " +
+            " INNER JOIN v.tags vt " +
+            " INNER JOIN v.channel c " +
+            " WHERE v.title = ?1 " +
+            " ORDER BY v.createdDate DESC ",
+            countQuery = " SELECT count(v.id) " +
+                    " FROM VideoEntity v " +
+                    " INNER JOIN v.tags vt " +
+                    " INNER JOIN v.channel c " +
+                    " WHERE v.title = ?1 ")
+    Page<VideoShortInfoMapper> findByTitle(String title, Pageable pageable);
 
     @Query(value = "  SELECT v.id AS videoId," +
             " v.title AS videoTitle, " +
@@ -88,8 +125,7 @@ public interface VideoRepository extends JpaRepository<VideoEntity, String>,
     //     VideoShortInfo(id,title, preview_attach(id,url),
 //                   published_date, channel(id,name,photo(url)),
 //                   view_count,duration)
-    @Query(value = "  SELECT " +
-            " v.id AS videoId," +
+    @Query(value = "  SELECT v.id AS videoId," +
             " v.title AS videoTitle, " +
             " v.previewAttachId AS videoPreviewAttachId, " +
             " v.publishedDate AS videoPublishedDate, " +
@@ -99,7 +135,8 @@ public interface VideoRepository extends JpaRepository<VideoEntity, String>,
             " v.viewCount AS videoViewCount " +
             " FROM VideoEntity v " +
             " INNER JOIN v.tags vt " +
-            " INNER JOIN v.channel c ",
+            " INNER JOIN v.channel c " +
+            " ORDER BY v.createdDate DESC ",
             countQuery = " SELECT count(v.id) " +
                     " FROM VideoEntity v " +
                     " INNER JOIN v.tags vt " +
@@ -108,13 +145,25 @@ public interface VideoRepository extends JpaRepository<VideoEntity, String>,
 
     //    VideoPlayListInfo(id,title, preview_attach(id,url), view_count,
 //                       published_date,duration)
-    @Query(" SELECT " +
-            " v.id AS videoId," +
+    @Query(value = "  SELECT v.id AS videoId," +
             " v.title AS videoTitle, " +
             " v.previewAttachId AS videoPreviewAttachId, " +
-            " v.viewCount AS videoViewCount, " +
-            " v.publishedDate AS videoPublishedDate " +
+            " v.publishedDate AS videoPublishedDate, " +
+            " c.id AS channelId," +
+            " c.name AS channelName," +
+            " c.photoId AS channelPhotoId, " +
+            " v.viewCount AS videoViewCount " +
             " FROM VideoEntity v " +
-            " WHERE v.channelId = ?1 ")
+            " INNER JOIN v.tags vt " +
+            " INNER JOIN v.channel c " +
+            " WHERE v.channelId = ?1 " +
+            " ORDER BY v.createdDate DESC ",
+            countQuery = " SELECT count(v.id) " +
+                    " FROM VideoEntity v " +
+                    " INNER JOIN v.tags vt " +
+                    " INNER JOIN v.channel c " +
+                    " WHERE v.channelId = ?1 ")
     Page<VideoShortInfoMapper> findByChannelId(String channelId, Pageable pageable);
+
+    Optional<VideoEntity> findByIdAndVisibleTrue(String videoId);
 }

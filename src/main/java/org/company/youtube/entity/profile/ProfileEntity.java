@@ -4,11 +4,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.company.youtube.entity.attach.AttachEntity;
+import org.company.youtube.entity.report.ReportEntity;
+import org.company.youtube.entity.video.VideoLikeEntity;
 import org.company.youtube.enums.ProfileRole;
 import org.company.youtube.enums.ProfileStatus;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -51,5 +54,8 @@ public class ProfileEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "photo_id", insertable = false, updatable = false)
     private AttachEntity photo;
+
+    @OneToMany(mappedBy = "profile", fetch = FetchType.LAZY)
+    private List<ReportEntity> reports;
 
 }

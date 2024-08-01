@@ -54,15 +54,14 @@ public class ChannelController {
 
     @GetMapping("/channel/{channelId}")
     public ResponseEntity<ChannelDTO> getChannelById(@PathVariable String channelId) {
-        return ResponseEntity.ok().body(channelService.getChannel(channelId));
+        return ResponseEntity.ok().body(channelService.getChannelById(channelId));
     }
 
     //        7. Change Channel Status (ADMIN,USER and OWNER)
 
     @PutMapping("/change-status/{channelId}")
-    public ResponseEntity<ChannelDTO> changeStatus(@PathVariable String channelId,
-                                                   @RequestParam("status") ChannelStatus status) {
-        return ResponseEntity.ok().body(channelService.changeStatus(channelId, status));
+    public ResponseEntity<ChannelDTO> changeStatus(@PathVariable String channelId) {
+        return ResponseEntity.ok().body(channelService.changeStatus(channelId));
     }
 
 //    8. User Channel List (murojat qilgan userni)

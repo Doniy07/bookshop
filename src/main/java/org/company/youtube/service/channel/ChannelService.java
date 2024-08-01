@@ -56,7 +56,7 @@ public class ChannelService {
     }
 
     public ChannelEntity checkOwner(String channelId) {
-        ChannelEntity entity = getChannelById(channelId);
+        ChannelEntity entity = getChannel(channelId);
         if (!entity.getProfileId().equals(SecurityUtil.getProfileId())) {
             throw new AppBadException("You are not owner of this channel");
         }
@@ -88,19 +88,19 @@ public class ChannelService {
         return toDTO(entity);
     }
 
-    public ChannelEntity getChannelById(String channelId) {
-        Optional<ChannelEntity> optional = channelRepository.findById(channelId);
+    public ChannelEntity getChannel(String channelId) {
+        Optional<ChannelEntity> optional = channelRepository.findByIdAndStatusActive(channelId);
         if (optional.isEmpty()) {
             throw new AppBadException("Channel not found");
         }
         return optional.get();
     }
 
-    public ChannelDTO getChannel(String channelId) {
-        return toDTO(getChannelById(channelId));
+    public ChannelDTO getChannelById(String channelId) {
+        return toDTO(getChannel(channelId));
     }
 
-    public ChannelDTO changeStatus(String channelId, ChannelStatus status) {
+    public ChannelDTO changeStatus(String channelId) {
         ChannelEntity entity = checkOwner(channelId);
         if(!SecurityUtil.getProfile().getRole().equals(ProfileRole.ROLE_ADMIN)){
             throw new AppBadException("You are not ADMIN");

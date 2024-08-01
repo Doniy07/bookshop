@@ -9,6 +9,7 @@ import org.company.youtube.dto.video.VideoDTO;
 import org.company.youtube.dto.video.VideoUpdateDTO;
 import org.company.youtube.entity.video.VideoEntity;
 import org.company.youtube.enums.VideoStatus;
+import org.company.youtube.exception.AppBadException;
 import org.company.youtube.mapper.VideoShortInfoMapper;
 import org.company.youtube.repository.video.VideoRepository;
 import org.company.youtube.service.playlist.PlaylistVideoService;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,15 +36,7 @@ public class VideoService {
 
     public VideoCreateDTO create(VideoCreateDTO dto) {
 
-        VideoEntity entity = VideoEntity.builder()
-                .title(dto.getTitle())
-                .description(dto.getDescription())
-                .previewAttachId(dto.getPreviewAttachId())
-                .channelId(dto.getChannelId())
-                .categoryId(dto.getCategoryId())
-                .videoId(dto.getVideoId())
-                .videoType(dto.getVideoType())
-                .build();
+        VideoEntity entity = VideoEntity.builder().title(dto.getTitle()).description(dto.getDescription()).previewAttachId(dto.getPreviewAttachId()).channelId(dto.getChannelId()).categoryId(dto.getCategoryId()).videoId(dto.getVideoId()).videoType(dto.getVideoType()).build();
 
 
         videoRepository.save(entity);
@@ -54,17 +48,7 @@ public class VideoService {
             playlistVideoService.merge(entity.getId(), dto.getPlaylistId());
         }
 
-        return VideoCreateDTO.builder()
-                .id(entity.getId())
-                .title(entity.getTitle())
-                .description(entity.getDescription())
-                .previewAttachId(entity.getPreviewAttachId())
-                .channelId(entity.getChannelId())
-                .categoryId(entity.getCategoryId())
-                .videoId(entity.getVideoId())
-                .videoType(entity.getVideoType())
-                .playlistId(dto.getPlaylistId() != null ? dto.getPlaylistId() : null)
-                .build();
+        return VideoCreateDTO.builder().id(entity.getId()).title(entity.getTitle()).description(entity.getDescription()).previewAttachId(entity.getPreviewAttachId()).channelId(entity.getChannelId()).categoryId(entity.getCategoryId()).videoId(entity.getVideoId()).videoType(entity.getVideoType()).playlistId(dto.getPlaylistId() != null ? dto.getPlaylistId() : null).build();
     }
 
     /*private VideoDTO toDTO(VideoEntity entity) {
@@ -89,7 +73,7 @@ public class VideoService {
 
     public VideoUpdateDTO update(String videoId, VideoUpdateDTO dto) {
 
-        VideoEntity entity = get(videoId);
+        VideoEntity entity = getVideo(videoId);
 
         entity.setTitle(dto.getTitle() != null ? dto.getTitle() : entity.getTitle());
         entity.setDescription(dto.getDescription() != null ? dto.getDescription() : entity.getDescription());
@@ -97,49 +81,46 @@ public class VideoService {
         videoRepository.save(entity);
         videoTagService.merge(entity.getId(), dto.getTagIds());
 
-        return VideoUpdateDTO.builder()
-                .id(entity.getId())  // to delete
-                .title(entity.getTitle())
-                .description(entity.getDescription())
-                .categoryId(entity.getCategoryId())
-                .build();
+        return VideoUpdateDTO.builder().id(entity.getId())  // to delete
+                .title(entity.getTitle()).description(entity.getDescription()).categoryId(entity.getCategoryId()).build();
     }
 
-    private VideoEntity get(String videoId) {
-        return videoRepository
-                .findById(videoId)
-                .orElseThrow();
+    public VideoEntity getVideo(String videoId) {
+        Optional<VideoEntity> optional = videoRepository.findByIdAndVisibleTrue(videoId);
+        if (optional.isEmpty()) {
+            throw new AppBadException("Video not found");
+        }
+        return optional.get();
     }
 
     public VideoDTO changeStatus(String videoId, VideoStatus status) {
-        VideoEntity entity = get(videoId);
-        entity.setVideoStatus(entity.getVideoStatus() != null ? status : entity.getVideoStatus());
+        VideoEntity entity = getVideo(videoId);
+        entity.setVideoStatus(entity.getVideoStatus() == null ? status : entity.getVideoStatus());
         videoRepository.save(entity);
-        return VideoDTO.builder()
-                .id(entity.getId())
-                .videoStatus(entity.getVideoStatus())
-                .build();
+        return VideoDTO.builder().id(entity.getId()).videoStatus(entity.getVideoStatus()).build();
     }
 
     public VideoDTO increaseViewCount(String videoId) {
-        VideoEntity entity = get(videoId);
+        VideoEntity entity = getVideo(videoId);
         videoRepository.increaseViewCount(videoId);
-        return VideoDTO.builder()
-                .id(entity.getId())
-                .viewCount(entity.getViewCount())
-                .build();
+        return VideoDTO.builder().id(entity.getId()).viewCount(entity.getViewCount()).build();
+    }
 
+    public VideoDTO increaseShareCount(String videoId) {
+        VideoEntity entity = getVideo(videoId);
+        videoRepository.increaseShareCount(videoId);
+        return VideoDTO.builder().id(entity.getId()).sharedCount(entity.getSharedCount()).build();
     }
 
     public PageImpl<VideoDTO> paginationByCategoryId(String categoryId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<VideoShortInfoMapper> mapperList = videoRepository.findByCategoryIdOrderByCreatedDateDesc(categoryId, pageable);
-        return new PageImpl<>(iteratorShortInfo(mapperList.getContent(),false), mapperList.getPageable(), mapperList.getTotalElements());
+        Page<VideoShortInfoMapper> mapperList = videoRepository.findByCategoryId(categoryId, pageable);
+        return new PageImpl<>(iteratorShortInfo(mapperList.getContent(), false), mapperList.getPageable(), mapperList.getTotalElements());
     }
 
     public PageImpl<VideoDTO> searchByTitle(String title, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<VideoShortInfoMapper> mapperList = videoRepository.findByTitleContainingIgnoreCaseOrderByCreatedDateDesc(title, pageable);
+        Page<VideoShortInfoMapper> mapperList = videoRepository.findByTitle(title, pageable);
         return new PageImpl<>(iteratorShortInfo(mapperList.getContent(), false), mapperList.getPageable(), mapperList.getTotalElements());
     }
 
@@ -178,38 +159,11 @@ public class VideoService {
 
     private VideoDTO shortInfo(VideoShortInfoMapper mapper, boolean isAdmin) {
 
-        // create video
-        VideoDTO dto = VideoDTO.builder()
-                .id(mapper.getVideoId())
-                .title(mapper.getVideoTitle())
-                .previewAttachId(mapper.getVideoPreviewAttachId())
-                .publishedDate(mapper.getVideoPublishedDate())
-                .channel(mapper.getChannelId() == null ? null : ChannelDTO.builder()
-                        .id(mapper.getChannelId())
-                        .name(mapper.getChannelName())
-                        .photoId(mapper.getChannelPhotoId())
-                        .build())
-                .profile(!isAdmin ? null : ProfileDTO.builder()
-                        .id(mapper.getProfileId())
-                        .name(mapper.getProfileName())
-                        .surname(mapper.getProfileSurname())
-                        .build())
-                .playlist(!isAdmin ? null : PlaylistDTO.builder()
-                        .id(mapper.getPlaylistId())
-                        .name(mapper.getPlaylistName())
-                        .build())
-                .viewCount(mapper.getVideoViewCount())
-                .build();
-
-        return dto;
+        return VideoDTO.builder().id(mapper.getVideoId()).title(mapper.getVideoTitle()).previewAttachId(mapper.getVideoPreviewAttachId()).publishedDate(mapper.getVideoPublishedDate()).channel(mapper.getChannelId() == null ? null : ChannelDTO.builder().id(mapper.getChannelId()).name(mapper.getChannelName()).photoId(mapper.getChannelPhotoId()).build()).profile(!isAdmin ? null : ProfileDTO.builder().id(mapper.getProfileId()).name(mapper.getProfileName()).surname(mapper.getProfileSurname()).build()).playlist(!isAdmin ? null : PlaylistDTO.builder().id(mapper.getPlaylistId()).name(mapper.getPlaylistName()).build()).viewCount(mapper.getVideoViewCount()).build();
     }
 
-    public List<VideoDTO> iteratorShortInfo(List<VideoShortInfoMapper> mapperList, boolean isAdmin) {
-        List<VideoDTO> list = mapperList
-                .stream()
-                .map(mapper -> shortInfo(mapper, isAdmin))
-                .toList();
-        return list;
+    private List<VideoDTO> iteratorShortInfo(List<VideoShortInfoMapper> mapperList, boolean isAdmin) {
+        return mapperList.stream().map(mapper -> shortInfo(mapper, isAdmin)).toList();
     }
 
     public PageImpl<VideoDTO> videoList(int page, int size) {

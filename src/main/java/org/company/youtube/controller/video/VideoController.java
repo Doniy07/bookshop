@@ -49,6 +49,13 @@ public class VideoController {
         return ResponseEntity.ok().body(videoService.increaseViewCount(videoId));
     }
 
+    //    4. Increase video_shared Count by id
+
+    @PutMapping("/increase-shared-count/{videoId}")
+    public ResponseEntity<VideoDTO> increaseShareCount(@PathVariable("videoId") String videoId) {
+        return ResponseEntity.ok().body(videoService.increaseShareCount(videoId));
+    }
+
 //    5. Get Video Pagination by CategoryId
 //         VideoShortInfo
 
@@ -103,8 +110,8 @@ public class VideoController {
 
     @GetMapping("/pagination/channel-video-list/{channelId}")
     public ResponseEntity<PageImpl<VideoDTO>> paginationByChannelId(@PathVariable("channelId") String channelId,
-                                                                   @RequestParam(value = "page", defaultValue = "1") int page,
-                                                                   @RequestParam(value = "size", defaultValue = "10") int size) {
+                                                                    @RequestParam(value = "page", defaultValue = "1") int page,
+                                                                    @RequestParam(value = "size", defaultValue = "10") int size) {
         return ResponseEntity.ok().body(videoService.paginationByChannelId(channelId, page - 1, size));
     }
 

@@ -19,7 +19,7 @@ public class ReportEntity {
 
     @Id
     @UuidGenerator
-    String id;
+    private String id;
 
     @Column(name = "profile_id")
     private String profileId;
@@ -27,18 +27,19 @@ public class ReportEntity {
     @JoinColumn(name = "profile_id", insertable = false, updatable = false)
     private ProfileEntity profile;
 
-    @Column(columnDefinition = "text")
+    @Column(name = "content", columnDefinition = "text")
     private String content;
 
     @Column(name = "entity_id")
     private String entityId;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "type")
     private ReportType type;
 
     @Builder.Default
     @Column(name = "visible")
-    private Boolean visible=Boolean.TRUE;
+    private Boolean visible = Boolean.TRUE;
 
     @Builder.Default
     @Column(name = "create_date")
