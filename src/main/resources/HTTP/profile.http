@@ -1,0 +1,53 @@
+### Create Profile for admin
+POST http://localhost:8080/api/v1/profile/create
+Content-Type: application/json
+Authorization: Bearer {token}
+#Example
+#Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MzY5NDAxNDEsInBob25lIjoiKzk5ODk3NTU1NTU1MiIsImV4cCI6MTczNzAyNjU0MSwiaXNzIjoiQm9vayBTaG9wIn0.BfYOsFYjmWjBYjpqjtUyPcDGgWGvsJIOgiWMcx77njzNw63mhg2q_pnPfh9gsXEHDngs-xNqshaxzn0tn5oczA
+
+{
+  "fio": "Doniyor",
+  "phone": "+998901234567",
+  "password": "12345",
+  "status": "ACTIVE",
+  "role": "ROLE_CUSTOMER"
+}
+
+### Update Profile for Admin
+PUT http://localhost:8080/api/v1/profile/update/2ce5efe4-5b5b-4ca6-b705-bc45a35589f7
+Content-Type: application/json
+Authorization: Bearer {token}
+
+{
+  "fio": "Ahror",
+  "phone": "+998977777777",
+  "password": "12345",
+  "status": "ACTIVE",
+  "role": "ROLE_CUSTOMER"
+}
+
+### Update Profile for Customer
+PUT http://localhost:8080/api/v1/profile/update-user
+Content-Type: application/json
+Authorization: Bearer {token}
+
+{
+  "fio": "Ali",
+  "phone": "+998975555552",
+  "password": "12345"
+}
+
+### Get all Profiles for admin
+GET http://localhost:8080/api/v1/profile/all
+Content-Type: application/json
+Authorization: Bearer {token}
+
+### Get Profile by id for admin
+GET http://localhost:8080/api/v1/profile/2ce5efe4-5b5b-4ca6-b705-bc45a35589f7
+Content-Type: application/json
+Authorization: Bearer {token}
+
+### Delete Profile
+DELETE http://localhost:8080/api/v1/profile/delete/2ce5efe4-5b5b-4ca6-b705-bc45a35589f7
+Content-Type: application/json
+Authorization: Bearer {token}

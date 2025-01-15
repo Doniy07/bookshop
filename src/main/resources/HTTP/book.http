@@ -1,0 +1,50 @@
+### Create Book for admin
+POST http://localhost:8080/api/v1/book/create
+Content-Type: application/json
+Authorization: Bearer {token}
+#Example
+#Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MzY5NDAxNDEsInBob25lIjoiKzk5ODk3NTU1NTU1MiIsImV4cCI6MTczNzAyNjU0MSwiaXNzIjoiQm9vayBTaG9wIn0.BfYOsFYjmWjBYjpqjtUyPcDGgWGvsJIOgiWMcx77njzNw63mhg2q_pnPfh9gsXEHDngs-xNqshaxzn0tn5oczA
+
+{
+  "title": "Tom and Jerry",
+  "description": "Book for kids",
+  "count": 10,
+  "price": 100,
+  "categoryIds": [
+    "704513f8-f767-45a1-afa5-3675e3097a6c",
+    "18faeaca-6336-4ebd-9e76-f7c016034296"
+  ]
+}
+
+
+### Get book by id for admin
+GET http://localhost:8080/api/v1/book/a8a0aab7-5096-4452-849d-2b8e04c90b5c
+Content-Type: application/json
+Authorization: Bearer {token}
+
+
+### Update book for admin
+PUT http://localhost:8080/api/v1/book/update/a8a0aab7-5096-4452-849d-2b8e04c90b5c
+Content-Type: application/json
+Authorization: Bearer {token}
+
+{
+  "title": "DeadPool",
+  "description": "adventures",
+  "count": 3,
+  "price": 170,
+  "categoryIds": [
+    "fbaff1ff-1fc5-49e2-8fc0-b2e4cf14db23"
+  ]
+}
+
+### Delete book
+DELETE http://localhost:8080/api/v1/book/delete/a8a0aab7-5096-4452-849d-2b8e04c90b5c
+Content-Type: application/json
+Authorization: Bearer {token}
+
+### Search book for customer
+GET http://localhost:8080/api/v1/book/search?title=D
+Content-Type: application/json
+Authorization: Bearer {token}
+

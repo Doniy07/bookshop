@@ -1,0 +1,31 @@
+### Get all sales for admin
+GET http://localhost:8080/api/v1/sale/all
+Content-Type: application/json
+Authorization: Bearer {token}
+#Example
+#Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MzY5NDAxNDEsInBob25lIjoiKzk5ODk3NTU1NTU1MiIsImV4cCI6MTczNzAyNjU0MSwiaXNzIjoiQm9vayBTaG9wIn0.BfYOsFYjmWjBYjpqjtUyPcDGgWGvsJIOgiWMcx77njzNw63mhg2q_pnPfh9gsXEHDngs-xNqshaxzn0tn5oczA
+
+### Get all sales for customer
+GET http://localhost:8080/api/v1/sale/my-purchased-books
+Content-Type: application/json
+Authorization: Bearer {token}
+
+
+### Create sale for customer
+POST http://localhost:8080/api/v1/sale/create
+Content-Type: application/json
+Authorization: Bearer {token}
+
+{
+  "bookId": "a5f6a0ee-a3b6-4bc3-aabf-c23bc3b1b9d8"
+}
+
+### Get sale by id for admin
+GET http://localhost:8080/api/v1/sale/67793608-6dde-4261-9053-a3ede6f6e070
+Content-Type: application/json
+Authorization: Bearer {token}
+
+### Delete
+DELETE http://localhost:8080/api/v1/sale/delete/67793608-6dde-4261-9053-a3ede6f6e070
+Content-Type: application/json
+Authorization: Bearer {token}

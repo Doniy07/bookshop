@@ -1,0 +1,35 @@
+### Create category for admin
+POST http://localhost:8080/api/v1/category/create
+Content-Type: application/json
+Authorization: Bearer {token}
+#Example
+#Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MzY5NDAxNDEsInBob25lIjoiKzk5ODk3NTU1NTU1MiIsImV4cCI6MTczNzAyNjU0MSwiaXNzIjoiQm9vayBTaG9wIn0.BfYOsFYjmWjBYjpqjtUyPcDGgWGvsJIOgiWMcx77njzNw63mhg2q_pnPfh9gsXEHDngs-xNqshaxzn0tn5oczA
+
+{
+  "title": "Fantasy"
+}
+
+### Get all for admin
+GET http://localhost:8080/api/v1/category/all
+Content-Type: application/json
+Authorization: Bearer {token}
+
+### Get by id for admin
+GET http://localhost:8080/api/v1/category/18faeaca-6336-4ebd-9e76-f7c016034296
+Content-Type: application/json
+Authorization: Bearer {token}
+
+### Update for admin
+PUT http://localhost:8080/api/v1/category/update
+Content-Type: application/json
+Authorization: Bearer {token}
+
+{
+  "id": "18faeaca-6336-4ebd-9e76-f7c016034296",
+  "title": "Detective"
+}
+
+### Delete
+DELETE http://localhost:8080/api/v1/category/delete/18faeaca-6336-4ebd-9e76-f7c016034296
+Content-Type: application/json
+Authorization: Bearer {token}

@@ -1,0 +1,26 @@
+### LOGIN
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "phone": "+998909104962",
+  "password": "12345"
+}
+
+### REGISTRATION
+POST http://localhost:8080/api/v1/auth/registration
+Content-Type: application/json
+
+{
+  "fio": "Mansur",
+  "phone": "+99890129753",
+  "password": "12345"
+}
+
+### Get access token
+POST http://localhost:8080/api/v1/auth/get-access-token
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MzY5NDA1MzEsInBob25lIjoiKzk5ODkwOTEwNDk2MiIsImV4cCI6MTczODIzNjUzMSwiaXNzIjoiQm9vayBTaG9wIn0.LLo1hdX_FuKfh2RLZU6N7HlryQ54_zdbZ03NlYIkgt0gIeK5QXC5lkGsyFZQi7DJ9JwGDdVewDw434gvkIKn8w"
+}
