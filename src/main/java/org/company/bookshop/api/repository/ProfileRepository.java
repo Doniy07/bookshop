@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +23,7 @@ public interface ProfileRepository extends JpaRepository<ProfileEntity, String> 
 
     @Query("SELECT p FROM ProfileEntity p WHERE p.visible = true")
     List<ProfileEntity> findAllByVisibleTrue();
+
     @Transactional
     @Modifying
     @Query("UPDATE ProfileEntity p SET p.balance = ?2 WHERE p.id = ?1")

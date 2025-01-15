@@ -8,8 +8,8 @@ import org.company.bookshop.api.entity.BookCategoryEntity;
 import org.company.bookshop.api.repository.BookCategoryRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor

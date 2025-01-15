@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface BookCategoryRepository extends JpaRepository<BookCategoryEntity, String> {
@@ -24,5 +23,5 @@ public interface BookCategoryRepository extends JpaRepository<BookCategoryEntity
     @Modifying
     @Query("DELETE FROM BookCategoryEntity bc WHERE bc.bookId = :bookId AND bc.categoryId = :categoryId")
     void deleteByBookIdAndCategoryId(@Param("bookId") String bookId,
-                                     @Param("categoryId")  String categoryId);
+                                     @Param("categoryId") String categoryId);
 }

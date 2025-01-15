@@ -41,11 +41,6 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.ok(new ApiResponse<>(exception.getMessage(), 400, true));
     }
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ApiResponse<String>> exp(NotFoundException exception) {
-        return ResponseEntity.ok(new ApiResponse<>(exception.getMessage(), 404, true));
-    }
-
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiResponse<String>> exp(RuntimeException exception) {
         return ResponseEntity.ok(new ApiResponse<>(exception.getMessage(), 500, true));

@@ -1,11 +1,8 @@
 package org.company.bookshop.api.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -21,7 +18,7 @@ public class BaseEntity {
 
     @CreationTimestamp
     @Column(name = "created_date")
-    private LocalDateTime createdDate=LocalDateTime.now();
+    private LocalDateTime createdDate = LocalDateTime.now();
 
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;

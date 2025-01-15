@@ -12,9 +12,6 @@ import org.company.bookshop.api.exception.BadRequestException;
 import org.company.bookshop.api.repository.BookRepository;
 import org.company.bookshop.api.service.BookCategoryService;
 import org.company.bookshop.api.util.ApiResponse;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

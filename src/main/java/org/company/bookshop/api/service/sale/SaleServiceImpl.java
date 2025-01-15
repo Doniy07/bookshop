@@ -10,7 +10,6 @@ import org.company.bookshop.api.entity.BookEntity;
 import org.company.bookshop.api.entity.ProfileEntity;
 import org.company.bookshop.api.entity.SaleEntity;
 import org.company.bookshop.api.exception.BadRequestException;
-import org.company.bookshop.api.mapper.SaleBookMapper;
 import org.company.bookshop.api.repository.SaleRepository;
 import org.company.bookshop.api.service.book.BookServiceImpl;
 import org.company.bookshop.api.service.profile.ProfileServiceImpl;
@@ -38,9 +37,9 @@ public class SaleServiceImpl implements SaleService {
             throw new BadRequestException("Balance is not enough");
         SaleEntity entity = saleRepository.save(
                 SaleEntity.builder()
-                .bookId(request.bookId())
-                .customerId(customer.getId())
-                .build());
+                        .bookId(request.bookId())
+                        .customerId(customer.getId())
+                        .build());
         bookServiceImpl.updateCount(request.bookId(), book.getCount() - 1);
         profileServiceImpl.updateBalance(customer.getId(), customer.getBalance() - book.getPrice());
         return ApiResponse.ok(mapToResponse().apply(entity));
